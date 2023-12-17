@@ -3,7 +3,7 @@ package TESTSHOP;
 import javax.swing.*;
 import static TESTSHOP.WINDOWMANAGER.createWindow;
 
-// sigma ohio
+// tester
 
 public class MAIN
 {
