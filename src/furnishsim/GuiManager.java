@@ -68,9 +68,6 @@ public class GuiManager
         });
 
 
-
-
-
         // ADDING TO SCREEN & WINDOW
         infoScreen.add(businessData);
         infoScreen.add(tickButton);
@@ -81,7 +78,8 @@ public class GuiManager
         for (Furniture furniture : gameState.getFurnitures())
         {
             JButton button = new JButton("MAKE " + furniture.getFurnitureName() + " [" + furniture.getWoodCost() + "]");
-            button.addActionListener(new ActionListener() {
+            button.addActionListener(new ActionListener()
+            {
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
@@ -93,12 +91,35 @@ public class GuiManager
             infoScreen.add(button);
         }
 
+        // make buy blueprint button
+        for (Furniture furniture : gameState.getFurnitures())
+        {
+            if (!furniture.hasBlueprint())
+            {
+                JButton buyBlueprintButton = new JButton("BUY BLUEPRINT " + furniture.getFurnitureName() + " [" + furniture.getBlueprintCost() + "$]");
 
-        gameWindow.add(infoScreen);
+                buyBlueprintButton.addActionListener(new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        // TODO: add identifier; "purchase unseccessful" through boolean; give feedback response
+                        gameState.buyBlueprint(furniture);
+                        System.out.println("bought blueprint for " + furniture.getFurnitureName().toLowerCase());
+                        businessData.setText(gameState.toString());
+                    }
 
-        System.out.println("FurnishSim has started!!!");
+                });
+                infoScreen.add(buyBlueprintButton);
+            }
+            // hide buy button if bought
 
-        gameWindow.setVisible(true);
+            gameWindow.add(infoScreen);
 
+            System.out.println("FurnishSim has started!!!");
+
+            gameWindow.setVisible(true);
+
+        }
     }
 }

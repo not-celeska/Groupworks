@@ -49,7 +49,7 @@ public class Business
                // checks stock
                 if (findTotalStock() == 0) {
                     System.out.println("Customer [" + customer + "] unhappy --> left. Remaining customers: " + customersInStore);
-                    customersInStore--;
+                    customersInStore -= 2;
                     customerAttraction -= 0.05;
                     break;
                 } else {
@@ -108,6 +108,15 @@ public class Business
         {
             wood -= furniture.getWoodCost();
             furniture.setNumInStock(furniture.getNumInStock() + 1);
+        }
+    }
+
+    public void buyBlueprint(Furniture furniture)
+    {
+        if (money >= furniture.getBlueprintCost())
+        {
+            money -= furniture.getBlueprintCost();
+            furniture.setHasBlueprint(true);
         }
     }
 
