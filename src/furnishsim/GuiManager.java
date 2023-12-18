@@ -18,7 +18,7 @@ public class GuiManager
     {
         gameWindow = new JFrame();
         gameWindow.setSize(850, 600);
-        gameWindow.setResizable(false);
+        gameWindow.setResizable(true);
         gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         gameWindow.setLocationRelativeTo(null);
 
@@ -86,6 +86,7 @@ public class GuiManager
                 public void actionPerformed(ActionEvent e)
                 {
                     gameState.makeFurniture(furniture);
+                    System.out.println("made 1 " + furniture.getFurnitureName().toLowerCase());
                     businessData.setText(gameState.toString());
                 }
             });
