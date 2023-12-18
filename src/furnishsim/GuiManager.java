@@ -1,6 +1,8 @@
 package furnishsim;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GuiManager
 {
@@ -15,9 +17,27 @@ public class GuiManager
     public void runSimulation()
     {
         gameWindow = new JFrame();
+
+        // INFO SCREEN
         JPanel infoScreen = new JPanel();
+
+        // BUSINESS TEXT
         JLabel businessData = new JLabel(gameState.toString());
+
+        // TICK BUTTON
         JButton tickButton = new JButton("TICK");
+        tickButton.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                gameState.tick();
+                System.out.println("Tick was called!");
+                businessData.setText(gameState.toString());
+            }
+        });
+
+        // ADDING TO SCREEN & WINDOW
         infoScreen.add(businessData);
         infoScreen.add(tickButton);
         gameWindow.add(infoScreen);
