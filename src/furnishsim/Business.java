@@ -24,6 +24,7 @@ public class Business
             new Furniture("Chair", 20, 10, 40, false)};
     private int ticksActive;
     private int customersInStore;
+    private int enterPercentage; // <-- will change based off stage
 
     public Business()
     {
@@ -32,6 +33,7 @@ public class Business
         wood = 0;
         ticksActive = 0;
         profit = 0;
+        enterPercentage = 70; // TODO will change based off stage
         customerAttraction = 1.0;
     }
 
@@ -39,45 +41,7 @@ public class Business
     {
         // just update tick
         ticksActive++;
-        
-        // customer ai
-        customersInStore++; // this is 100% enterance rate; will be reduced
-
-        // will have to deal with when customer = 0;
-        if (customersInStore > 0) {
-            for (int customer = 1; customer <= customersInStore; customer++) {
-               // checks stock
-                if (findTotalStock() == 0) {
-                    System.out.println("Customer [" + customer + "] unhappy --> left. Remaining customers: " + customersInStore);
-                    customersInStore -= 2;
-                    customerAttraction -= 0.05;
-                    break;
-                } else {
-                    // 30%
-                    if (aiBehaviours.nextInt(1, 100) <= 30) {
-                        // checks availibility in order; might randomize for realism later through random indexing [5-15min]
-                        for (Furniture furniture : furnitures) {
-                            if (furniture.getNumInStock() > 0) {
-                                money += furniture.getSellingPrice();
-                                profit += furniture.getSellingPrice();
-                                furniture.setNumInStock(furniture.getNumInStock() - 1);
-                                System.out.println(furniture.getFurnitureName() + " was bought! [ +" + furniture.getSellingPrice() + "$ | " + "- 1 unit ]");
-                                customersInStore--;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        System.out.println("Customer [" + customer + "] just walking around.");
-                    }
-                }
-            }
-        }
-        else
-        {
-            System.out.println("No customers in the store yet..");
-        }
+        runCustomerAI();
         
 
         /*
@@ -118,6 +82,61 @@ public class Business
             money -= furniture.getBlueprintCost();
             furniture.setHasBlueprint(true);
         }
+    }
+
+    public void adveriseBrand(int projectedEffectiveness)
+    {
+        double trueEffectiveness = aiBehaviours.nextDouble(0, ((double) projectedEffectiveness / 10));
+        customerAttraction += trueEffectiveness;
+    }
+
+
+    public void runCustomerAI()
+    {
+        // customer ai
+        double customerEnterPercentage = customerAttraction * enterPercentage; // [stage.getEnterPercentage] store popularity  ; TODO rename variable
+        if (aiBehaviours.nextDouble(0.0, 100.0) <= customerEnterPercentage)
+        {
+            customersInStore++; // this is not 100% enterance rate; is reduced
+        }
+
+        // will have to deal with when customer = 0;
+        if (customersInStore > 0) {
+            for (int customer = 1; customer <= customersInStore; customer++) {
+                // checks stock
+                if (findTotalStock() == 0) {
+                    System.out.println("Customer [" + customer + "] unhappy --> left. Remaining customers: " + customersInStore);
+                    customersInStore -= 2;
+                    customerAttraction -= 0.05;
+                    break;
+                } else {
+                    // 30%
+                    if (aiBehaviours.nextInt(1, 100) <= 30) {
+                        // checks availibility in order; might randomize for realism later through random indexing [5-15min]
+                        for (Furniture furniture : furnitures) {
+                            if (furniture.getNumInStock() > 0) {
+                                money += furniture.getSellingPrice();
+                                profit += furniture.getSellingPrice();
+                                furniture.setNumInStock(furniture.getNumInStock() - 1);
+                                System.out.println(furniture.getFurnitureName() + " was bought! [ +" + furniture.getSellingPrice() + "$ | " + "- 1 unit ]");
+                                customersInStore--;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        System.out.println("Customer [" + customer + "] just walking around.");
+                    }
+                }
+            }
+        }
+        else
+        {
+            System.out.println("No customers in the store yet..");
+        }
+
+
     }
 
 

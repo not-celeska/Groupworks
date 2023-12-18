@@ -113,13 +113,18 @@ public class GuiManager
                 infoScreen.add(buyBlueprintButton);
             }
             // hide buy button if bought
-
-            gameWindow.add(infoScreen);
-
-            System.out.println("FurnishSim has started!!!");
-
-            gameWindow.setVisible(true);
-
         }
+
+        gameWindow.add(infoScreen);
+
+        System.out.println("FurnishSim has started!!!");
+
+        gameWindow.setVisible(true);
+
+    }
+
+    public void update()
+    {
+        // this should update the guis for when something is bought, reset the text, etc.
     }
 }
