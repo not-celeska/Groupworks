@@ -8,6 +8,10 @@ public class Business
     private String companyName;
     private int money;
     private int wood;
+    private int woodPrice = 2;
+    private Furniture[] furnitures = {
+            new Furniture("Stool", 0, 3, 10, true),
+            new Furniture("Chair", 20, 10, 40, false)};
     private int ticksActive;
 
 
@@ -32,6 +36,20 @@ public class Business
         - updates time spent?
          */
     }
+
+
+    // ========================
+    public void buyWood(int quantity)
+    {
+        // price = 2$
+        if (money >= (woodPrice * quantity))
+        {
+            money -= (woodPrice * quantity);
+            wood += quantity;
+        }
+    }
+
+
 
     public String toString()
     {
