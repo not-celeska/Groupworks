@@ -49,10 +49,43 @@ public class Business
         }
     }
 
+    public void makeFurniture(Furniture furniture)
+    {
+        if ((furniture.hasBlueprint()) && (wood >= furniture.getWoodCost()))
+        {
+            wood -= furniture.getWoodCost();
+            furniture.setNumInStock(furniture.getNumInStock() + 1);
+        }
+    }
 
+
+    public Furniture[] getFurnitures() {
+        return furnitures;
+    }
+
+    public int findTotalStock()
+    {
+        int totalStock = 0;
+
+        for (Furniture furniture : furnitures)
+        {
+            totalStock += furniture.getNumInStock();
+        }
+
+        return totalStock;
+    }
 
     public String toString()
     {
-        return (companyName.toUpperCase() + " | " + "MONEY: " + money + "$ | WOOD: " + wood + " | TICKS SINCE START: " + ticksActive + " | ");
+        // all basic info
+        String businessData = companyName.toUpperCase() + " | " + "MONEY: " + money + "$ | WOOD: " + wood + " | TICKS SINCE START: " + ticksActive + " | TOTAL STOCK: " + findTotalStock() + " | ";
+
+        // stock
+        for (Furniture furniture : furnitures)
+        {
+            businessData += (furniture.getFurnitureName().toUpperCase() + ": " + furniture.getNumInStock() + " | ");
+        }
+
+        return businessData;
     }
 }

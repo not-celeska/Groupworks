@@ -15,7 +15,8 @@ public class Furniture
     private int numInStock; // simulation wont sell if this is 0; adds 1 every time made.
 
     // ICON IMAGES FOR BUTTONS
-//    private ImageIcon buyBlueprint;
+//    private ImageIcon dontHaveBlueprint;
+//    private ImageIcon haveBlueprint;
 //    private ImageIcon makeFurniture;
 
 

@@ -17,6 +17,10 @@ public class GuiManager
     public void runSimulation()
     {
         gameWindow = new JFrame();
+        gameWindow.setSize(850, 600);
+        gameWindow.setResizable(false);
+        gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        gameWindow.setLocationRelativeTo(null);
 
         // INFO SCREEN
         JPanel infoScreen = new JPanel();
@@ -64,18 +68,35 @@ public class GuiManager
         });
 
 
+
+
+
         // ADDING TO SCREEN & WINDOW
         infoScreen.add(businessData);
         infoScreen.add(tickButton);
         infoScreen.add(oneWood);
         infoScreen.add(tenWood);
+
+        // MAKE FURNITURE BUTTONS
+        for (Furniture furniture : gameState.getFurnitures())
+        {
+            JButton button = new JButton("MAKE " + furniture.getFurnitureName() + " [" + furniture.getWoodCost() + "]");
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    gameState.makeFurniture(furniture);
+                    businessData.setText(gameState.toString());
+                }
+            });
+            infoScreen.add(button);
+        }
+
+
         gameWindow.add(infoScreen);
 
         System.out.println("FurnishSim has started!!!");
-        gameWindow.setSize(700, 150);
-        gameWindow.setResizable(true);
-        gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        gameWindow.setLocationRelativeTo(null);
+
         gameWindow.setVisible(true);
 
     }
