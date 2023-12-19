@@ -39,7 +39,7 @@ public class Business
         wood = 0;
         ticksActive = 0;
         profit = 0;
-        enterPercentage = 45; // TODO will change based off stage
+        enterPercentage = 45; // STAGE 1 STAT.
         customerAttraction = 1.0;
         numberOfPosters = 0;
     }
@@ -61,47 +61,6 @@ public class Business
         - updates time spent?
          */
     }
-
-
-    // ========================
-    public void buyWood(int quantity)
-    {
-        // price = 2$
-        if (money >= (WOOD_PRICE * quantity))
-        {
-            money -= (WOOD_PRICE * quantity);
-            wood += quantity;
-        }
-    }
-
-    public void makeFurniture(Furniture furniture)
-    {
-        if ((furniture.hasBlueprint()) && (wood >= furniture.getWoodCost()))
-        {
-            wood -= furniture.getWoodCost();
-            furniture.setNumInStock(furniture.getNumInStock() + 1);
-        }
-    }
-
-    public void buyBlueprint(Furniture furniture)
-    {
-        if (money >= furniture.getBlueprintCost())
-        {
-            money -= furniture.getBlueprintCost();
-            furniture.setHasBlueprint(true);
-        }
-    }
-
-    public void putUpPoster()
-    {
-        if (money >= POSTER_PRICE)
-        {
-            money -= POSTER_PRICE;
-            customerAttraction += Math.round(1000.0 * (5.0 / ((Math.pow(numberOfPosters, 2.0)) + 25.0))) / 1000.0;
-            numberOfPosters++;
-        }
-    }
-
 
     public void runCustomerAI()
     {
@@ -251,6 +210,48 @@ public class Business
             }
         }
     }
+
+    // ========================
+    public void buyWood(int quantity)
+    {
+        // price = 2$
+        if (money >= (WOOD_PRICE * quantity))
+        {
+            money -= (WOOD_PRICE * quantity);
+            wood += quantity;
+        }
+    }
+
+    public void makeFurniture(Furniture furniture)
+    {
+        if ((furniture.hasBlueprint()) && (wood >= furniture.getWoodCost()))
+        {
+            wood -= furniture.getWoodCost();
+            furniture.setNumInStock(furniture.getNumInStock() + 1);
+        }
+    }
+
+    public void buyBlueprint(Furniture furniture)
+    {
+        if (money >= furniture.getBlueprintCost())
+        {
+            money -= furniture.getBlueprintCost();
+            furniture.setHasBlueprint(true);
+        }
+    }
+
+    public void putUpPoster()
+    {
+        if (money >= POSTER_PRICE)
+        {
+            money -= POSTER_PRICE;
+            customerAttraction += Math.round(1000.0 * (5.0 / ((Math.pow(numberOfPosters, 2.0)) + 25.0))) / 1000.0;
+            numberOfPosters++;
+        }
+    }
+
+
+
 
 
     public Furniture[] getFurnitures() {
