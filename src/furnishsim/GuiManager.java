@@ -1,6 +1,7 @@
 package furnishsim;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -39,6 +40,7 @@ public class GuiManager
 
         // SMALLER PANELS
         JPanel optionPanel = new JPanel(); // buy & advertise
+        JPanel blueprintPanel = createBlueprintPanel();
         JPanel infoPanel = createInfoPanel();
 
         // TICK BUTTON
@@ -92,25 +94,6 @@ public class GuiManager
             optionPanel.add(button);
         }
 
-        // make buy blueprint button
-        for (Furniture furniture : gameState.getFurnitures()) {
-            if (!furniture.hasBlueprint()) {
-                JButton buyBlueprintButton = new JButton("BUY BLUEPRINT " + furniture.getFurnitureName() + " [" + furniture.getBlueprintCost() + "$]");
-                buyBlueprintButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // TODO: add identifier; "purchase unseccessful" through boolean; give feedback response
-                        gameState.buyBlueprint(furniture);
-                        System.out.println("bought blueprint for " + furniture.getFurnitureName().toLowerCase());
-                        updateGUI();
-                    }
-                });
-                // TODO unbuyable progression blueprints: use setEnabled(false)
-                optionPanel.add(buyBlueprintButton);
-            }
-            // hide buy button if bought
-        }
-
         JButton buyPosterButton = new JButton("BUY POSTER [" + (gameState.getNumPosters() + 1) + "]");
         buyPosterButton.addActionListener(new ActionListener() {
             @Override
@@ -124,6 +107,7 @@ public class GuiManager
 
         // Add the  screen to the game window
         gamePanel.add(optionPanel);
+        gamePanel.add(blueprintPanel);
         gamePanel.add(infoPanel);
 
         // Display the game window
@@ -134,6 +118,7 @@ public class GuiManager
     private JPanel createInfoPanel()
     {
         JPanel infoPanel = new JPanel(); // information
+        infoPanel.setBackground(Color.BLUE);
 
         // LABELS
 
@@ -165,6 +150,40 @@ public class GuiManager
         // RETURN
 
         return infoPanel;
+    }
+
+    private JPanel createBlueprintPanel() {
+        JPanel blueprintPanel = new JPanel();
+
+        // HEADER / TEXT
+        JLabel header = new JLabel("BLUEPRINTS: ");
+        blueprintPanel.add(header);
+
+        // BUTTONS
+        // make buy blueprint button
+        for (Furniture furniture : gameState.getFurnitures()) {
+            if (!furniture.hasBlueprint()) {
+                JButton buyBlueprintButton = new JButton("BUY BLUEPRINT " + furniture.getFurnitureName() + " [" + furniture.getBlueprintCost() + "$]");
+                buyBlueprintButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // TODO: add identifier; "purchase unseccessful" through boolean; give feedback response
+                        gameState.buyBlueprint(furniture);
+                        System.out.println("bought blueprint for " + furniture.getFurnitureName().toLowerCase());
+                        updateGUI();
+
+                        // if went well
+//                        buyBlueprintButton.setEnabled(false);
+                    }
+                });
+                // TODO unbuyable progression blueprints: use setEnabled(false)
+                blueprintPanel.add(buyBlueprintButton);
+            }
+        }
+
+        // RETURN
+        return blueprintPanel;
+
     }
 
     public void updateGUI()
