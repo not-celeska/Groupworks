@@ -55,7 +55,7 @@ public class WINDOWMANAGER extends JFrame implements Runnable
         window.add(board, BorderLayout.CENTER); // Add the panel to the center of the window
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 60, 0)); // Center align the buttons with spacing
-        Dimension buttonSize = new Dimension(100, 100); // Adjust the size as needed
+        Dimension buttonSize = new Dimension(60, 48); // Adjust the size as needed
 
         // INFO BUTTON
         JButton infoButton = new JButton();

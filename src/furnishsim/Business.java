@@ -18,23 +18,26 @@ public class Business
     private int money;
     private int profit; // TODO: -40 AT THE START.
     private int wood;
-    final private int woodPrice = 2;
+    final private int WOOD_PRICE = 2;
     private Furniture[] furnitures = {
             new Furniture("Stool", 0, 3, 10, true),
             new Furniture("Chair", 20, 10, 40, false)};
     private int ticksActive;
     private int customersInStore;
     private int enterPercentage; // <-- will change based off stage
+    private int numberOfPosters;
+    final private int POSTER_PRICE = 150; // TODO: price changes based off of numberOfPosters.
 
     public Business()
     {
         companyName = "Industrial Furniture Inc.";
-        money = 40;
+        money = 1500;
         wood = 0;
         ticksActive = 0;
         profit = 0;
         enterPercentage = 70; // TODO will change based off stage
         customerAttraction = 1.0;
+        numberOfPosters = 0;
     }
 
     public void tick()
@@ -59,9 +62,9 @@ public class Business
     public void buyWood(int quantity)
     {
         // price = 2$
-        if (money >= (woodPrice * quantity))
+        if (money >= (WOOD_PRICE * quantity))
         {
-            money -= (woodPrice * quantity);
+            money -= (WOOD_PRICE * quantity);
             wood += quantity;
         }
     }
@@ -84,10 +87,14 @@ public class Business
         }
     }
 
-    public void adveriseBrand(int projectedEffectiveness)
+    public void putUpPoster()
     {
-        double trueEffectiveness = aiBehaviours.nextDouble(0, ((double) projectedEffectiveness / 10));
-        customerAttraction += trueEffectiveness;
+        if (money >= POSTER_PRICE)
+        {
+            money -= POSTER_PRICE;
+            customerAttraction += Math.round(1000.0 * (5.0 / ((Math.pow(numberOfPosters, 2.0)) + 25.0))) / 1000.0;
+            numberOfPosters++;
+        }
     }
 
 
@@ -98,6 +105,7 @@ public class Business
         if (aiBehaviours.nextDouble(0.0, 100.0) <= customerEnterPercentage)
         {
             customersInStore++; // this is not 100% enterance rate; is reduced
+            // TODO multiple people
         }
 
         // will have to deal with when customer = 0;
@@ -105,11 +113,13 @@ public class Business
             for (int customer = 1; customer <= customersInStore; customer++) {
                 // checks stock
                 if (findTotalStock() == 0) {
-                    System.out.println("Customer [" + customer + "] unhappy --> left. Remaining customers: " + customersInStore);
-                    customersInStore -= 2;
+                    System.out.println("Customer [" + customer + "] sees no items to buy --> left. Remaining customers: " + customersInStore);
+                    customersInStore -= 1; // TODO try to fix this :)
                     customerAttraction -= 0.05;
                     break;
-                } else {
+                }
+                else
+                {
                     // 30%
                     if (aiBehaviours.nextInt(1, 100) <= 30) {
                         // checks availibility in order; might randomize for realism later through random indexing [5-15min]
@@ -159,7 +169,8 @@ public class Business
     public String toString()
     {
         // all basic info
-        String businessData = companyName.toUpperCase() + " | " + "MONEY: " + money + "$ | WOOD: " + wood + " | TICKS SINCE START: " + ticksActive + " | TOTAL STOCK: " + findTotalStock() + " | CUSTOMERS IN STORE: " + customersInStore + " | TOTAL PROFITS: " + profit + " | ";
+        String businessData = companyName.toUpperCase() + " | " + "MONEY: " + money + "$ | WOOD: " + wood +
+                " | TICKS SINCE START: " + ticksActive + " | TOTAL STOCK: " + findTotalStock() + " | CUSTOMERS IN STORE: " + customersInStore + " | TOTAL PROFITS: " + profit + " | CUSTOMER ATTRACTION: " + customerAttraction + " | ";
 
         // stock
         for (Furniture furniture : furnitures)
@@ -169,4 +180,16 @@ public class Business
 
         return businessData;
     }
+
+    public int getNumberOfPosters()
+    {
+        return numberOfPosters;
+    }
+
+
+    public double getCustomerAttraction()
+    {
+        return customerAttraction;
+    }
 }
+
