@@ -53,7 +53,6 @@ public class GuiManager
         JPanel blueprintPanel = createBlueprintPanel();
         JPanel infoPanel = createInfoPanel();
 
-
         // Add the  screen to the game window
         gamePanel.add(buyAndAdvertise);
         gamePanel.add(buyingPanel);
