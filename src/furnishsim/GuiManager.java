@@ -240,7 +240,7 @@ public class GuiManager
         popularityInfo.setText("POPULARITY: " + Math.round(gameState.getCustomerAttraction() * 100) + "%");
         blueprintsUnlockedInfo.setText("BLUEPRINTS UNLOCKED: " + gameState.getBlueprintsUnlocked());
         numPostersInfo.setText("# OF POSTERS: " + gameState.getNumPosters());
-        numWoodInfo.setText("WOOD: " + gameState.getWood());
+        numWoodInfo.setText("WOOD: " + gameState.getResources()[gameState.WOOD]);
 
 /*
         images (stage)

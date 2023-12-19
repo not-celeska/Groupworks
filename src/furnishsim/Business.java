@@ -7,25 +7,30 @@ import java.util.Random;
  */
 public class Business
 {
-    
+
     // RANDOM CHANCE MAKER ===
     private Random aiBehaviours = new Random();
     // =======================
-    
-    
+
+
     private String companyName;
     private double customerAttraction;
-    private int money;
+    private double money;
     private int profit; // TODO: -40 AT THE START.
-    private int wood;
+    private int[] resources;
     final private int WOOD_PRICE = 2;
+    final public int WOOD = 0;
+    final public int NAILS = 1;
+    final public int SCREWS = 2;
+    final public int HARDWOOD = 3;
     // TODO: ADD BALANCING CHANGES
     private Furniture[] furnitures = { // TODO ADD THE REST OF THE ICONS
             /* new Furniture("Stool", 0, 3, 10, true),*/
-            new Furniture("Chair", 20, 10, 40, false, "furnishResources/CHAIR.png", "furnishResources/CHAIR_HOVER.png", "furnishResources/CHAIR_PRESSED.png"),
-            new Furniture("Table", 75, 40, 120, false, "furnishResources/TABLE.png", "furnishResources/TABLE_HOVER.png", "furnishResources/TABLE_PRESSED.png"),
-            new Furniture("Shelf", 230, 20, 100, false, "furnishResources/SHELF.png", "furnishResources/SHELF_HOVER.png", "furnishResources/SHELF_PRESSED.png"),
-            new Furniture("Mailbox", 750, 110 , 500, false, "furnishResources/MAILBOX.png", "furnishResources/MAILBOX_HOVER.png", "furnishResources/MAILBOX_PRESSED.png") };
+            new Furniture("Stool", 0.0, new int[] {2, 4, 0, 0}, 17.6, false, "furnishResources/STOOL.png", "furnishResources/STOOL_HOVER.png", "furnishResources/STOOL_PRESSED.png"),
+            new Furniture("Chair", 200.0, new int[] {3, 6, 4, 0}, 25.1, false, "furnishResources/CHAIR.png", "furnishResources/CHAIR_HOVER.png", "furnishResources/CHAIR_PRESSED.png"),
+            new Furniture("Table", 400, new int[] {8, 4, 8, 1}, 96.8, false, "furnishResources/TABLE.png", "furnishResources/TABLE_HOVER.png", "furnishResources/TABLE_PRESSED.png"),
+            new Furniture("Shelf", 650, new int[] {2, 4, 0, 1}, 48.6, false, "furnishResources/SHELF.png", "furnishResources/SHELF_HOVER.png", "furnishResources/SHELF_PRESSED.png"),
+            new Furniture("Mailbox", 1500, new int[] {3, 40, 12, 0}, 30.6, false, "furnishResources/MAILBOX.png", "furnishResources/MAILBOX_HOVER.png", "furnishResources/MAILBOX_PRESSED.png") };
     private int ticksActive;
     private int customersInStore;
     private int enterPercentage; // <-- will change based off stage
@@ -36,9 +41,9 @@ public class Business
     {
         companyName = "Industrial Furniture Inc.";
         money = 150;
-        wood = 0;
         ticksActive = 0;
         profit = 0;
+        resources = new int[] {0, 0, 0, 0};
         enterPercentage = 45; // STAGE 1 STAT.
         customerAttraction = 1.0;
         numberOfPosters = 0;
@@ -50,7 +55,7 @@ public class Business
         ticksActive++;
         runCustomerAI();
         runEvent();
-        
+
 
         /*
         this will be called from gui; kind of like an "update" method
@@ -153,12 +158,12 @@ public class Business
                 if (aiBehaviours.nextInt(1, 100) <= 2)
                 {
                     System.out.print("yippee you is rich now!");
-                    moneyInherited = aiBehaviours.nextInt(1000, 100000);
+                    moneyInherited = aiBehaviours.nextInt(500, 2000);
                 }
                 else
                 {
                     System.out.print("very rich distant relative passed away.. womp womp");
-                    moneyInherited = aiBehaviours.nextInt(500, 2000);
+                    moneyInherited = aiBehaviours.nextInt(50, 250);
                 }
                 System.out.println(" + " + moneyInherited);
                 money += moneyInherited;
@@ -177,13 +182,13 @@ public class Business
                 // EVENT 4 | WARPED WOOD OR RATS GNAWED ON WOOD STOCK
                 int woodLost = aiBehaviours.nextInt(1, 75);
                 System.out.println("you lost " + woodLost + " wood cuz event said so");
-                if ((wood - woodLost) <= 0)
+                if ((resources[WOOD] - woodLost) <= 0)
                 {
-                    wood = 0;
+                    resources[WOOD] = 0;
                 }
                 else
                 {
-                    wood -= woodLost;
+                    resources[WOOD] -= woodLost;
                 }
             }
             else if (eventToOccur <=100)
@@ -218,15 +223,15 @@ public class Business
         if (money >= (WOOD_PRICE * quantity))
         {
             money -= (WOOD_PRICE * quantity);
-            wood += quantity;
+            resources[WOOD] += quantity;
         }
     }
 
     public void makeFurniture(Furniture furniture)
     {
-        if ((furniture.hasBlueprint()) && (wood >= furniture.getWoodCost()))
+        if ((furniture.hasBlueprint()) && (listIsGreater(resources, furniture.getResourceCost())))
         {
-            wood -= furniture.getWoodCost();
+            subtractList(resources, furniture.getResourceCost());
             furniture.setNumInStock(furniture.getNumInStock() + 1);
         }
     }
@@ -248,6 +253,10 @@ public class Business
             customerAttraction += Math.round(1000.0 * (5.0 / ((Math.pow(numberOfPosters, 2.0)) + 25.0))) / 1000.0;
             numberOfPosters++;
         }
+    }
+
+    public void buyStore() {
+
     }
 
 
@@ -285,7 +294,7 @@ public class Business
     public String toString()
     {
         // all basic info
-        String businessData = companyName.toUpperCase() + " | " + "MONEY: " + money + "$ | WOOD: " + wood +
+        String businessData = companyName.toUpperCase() + " | " + "MONEY: " + money + "$ | WOOD: " + resources[WOOD] + " | NAILS: " + resources[NAILS] + " | SCREWS: " + resources[SCREWS] + " | HARDWOOD: " + resources[HARDWOOD] +
                 " | TICKS SINCE START: " + ticksActive + " | TOTAL STOCK: " + findTotalStock() + " | CUSTOMERS IN STORE: " + customersInStore + " | TOTAL PROFITS: " + profit + " | CUSTOMER ATTRACTION: " + customerAttraction + " | ";
 
         // stock
@@ -312,17 +321,34 @@ public class Business
         return blueprintsUnlocked;
     }
 
-    public int getMoney()
+    public double getMoney()
     {
         return money;
     }
 
-    public int getWood() {
-        return wood;
+    public int[] getResources() {
+        return resources;
     }
 
     public String getCompanyName() {
         return companyName;
+    }
+
+
+
+    // utility
+    public boolean listIsGreater(int[] list1, int[] list2) { // returns true if list1's elements are all greater than or equal to list2's
+        for (int i = 0; i < list1.length; i++) {
+            if (list1[i] < list2[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public void subtractList(int[] list1, int[] list2) { // subtracts list2 from list1
+        for (int i = 0; i < list1.length; i++) {
+            list1[i] -= list2[i];
+        }
     }
 }
 

@@ -6,9 +6,9 @@ public class Furniture
 {
     // BASIC INFORMATION
     private String furnitureName; // name of the furniture item: stool, chair, etc.
-    private int blueprintCost;
-    private int woodCost; // wood needed to build
-    private int sellingPrice;
+    private double blueprintCost;
+    private int[] resourceCost; // wood needed to build
+    private double sellingPrice;
 
     // STATUS VARIABLE
     private boolean hasBlueprint;
@@ -25,12 +25,12 @@ public class Furniture
 
     // ========================================
 
-    public Furniture(String furnitureName, int blueprintCost, int woodCost, int sellingPrice, boolean hasBlueprint, String iconFilepath, String hoverIconFilepath, String clickIconFilepath) {
+    public Furniture(String furnitureName, double blueprintCost, int[] resourceCost, double sellingPrice, boolean hasBlueprint, String iconFilepath, String hoverIconFilepath, String clickIconFilepath) {
 
         // LOGISTICS
         this.furnitureName = furnitureName;
         this.blueprintCost = blueprintCost;
-        this.woodCost = woodCost;
+        this.resourceCost = resourceCost;
         this.sellingPrice = sellingPrice;
         this.hasBlueprint = hasBlueprint;
         numInStock = 0;
@@ -48,15 +48,15 @@ public class Furniture
         return furnitureName;
     }
 
-    public int getBlueprintCost() {
+    public double getBlueprintCost() {
         return blueprintCost;
     }
 
-    public int getWoodCost() {
-        return woodCost;
+    public int[] getResourceCost() {
+        return resourceCost;
     }
 
-    public int getSellingPrice() {
+    public double getSellingPrice() {
         return sellingPrice;
     }
 
@@ -81,12 +81,9 @@ public class Furniture
         this.hasBlueprint = hasBlueprint;
     }
 
-
     public int getNumInStock() {
         return numInStock;
     }
-
-    // sell and buy method void
 
     public void setNumInStock(int numInStock) {
         this.numInStock = numInStock;
