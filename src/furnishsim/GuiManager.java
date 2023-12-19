@@ -180,15 +180,27 @@ public class GuiManager
         // BUTTONS
         for (Furniture furniture : gameState.getFurnitures()) {
             if (!furniture.hasBlueprint()) {
-                JButton buyBlueprintButton = new JButton("BUY BLUEPRINT " + furniture.getFurnitureName() + " [" + furniture.getBlueprintCost() + "$]");
+                JButton buyBlueprintButton = new JButton();
                 buyBlueprintButton.setPreferredSize(new Dimension(48, 48));
-//                buyBlueprintButton.setPressedIcon();
+                buyBlueprintButton.setIcon(furniture.getIcon());
+                buyBlueprintButton.setRolloverEnabled(true);
+                buyBlueprintButton.setRolloverIcon(furniture.getHoverIcon());
+                buyBlueprintButton.setPressedIcon(furniture.getClickIcon());
+                buyBlueprintButton.setDisabledIcon(boughtIcon);
                 buyBlueprintButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         // TODO: add identifier; "purchase unseccessful" through boolean; give feedback response
                         gameState.buyBlueprint(furniture);
-                        System.out.println("bought blueprint for " + furniture.getFurnitureName().toLowerCase());
+                        if (furniture.hasBlueprint())
+                        {
+                            System.out.println("bought blueprint for " + furniture.getFurnitureName().toLowerCase());
+                            buyBlueprintButton.setEnabled(false);
+                        }
+                        else
+                        {
+                            System.out.println("failed to purchase");
+                        }
                         updateGUI();
 
                         // if went well

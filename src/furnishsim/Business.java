@@ -20,12 +20,12 @@ public class Business
     private int wood;
     final private int WOOD_PRICE = 2;
     // TODO: ADD BALANCING CHANGES
-    private Furniture[] furnitures = {
-            new Furniture("Stool", 0, 3, 10, true),
-            new Furniture("Chair", 20, 10, 40, false),
+    private Furniture[] furnitures = { // TODO ADD THE REST OF THE ICONS
+            /* new Furniture("Stool", 0, 3, 10, true),*/
+            new Furniture("Chair", 20, 10, 40, false, "furnishResources/CHAIR.png", "furnishResources/CHAIR_HOVER.png", "furnishResources/CHAIR_PRESSED.png") /* ,
             new Furniture("Table", 75, 40, 120, false),
             new Furniture("Shelf", 230, 20, 100, false),
-            new Furniture("Mailbox", 750, 110 , 500, false)};
+            new Furniture("Mailbox", 750, 110 , 500, false) */};
     private int ticksActive;
     private int customersInStore;
     private int enterPercentage; // <-- will change based off stage

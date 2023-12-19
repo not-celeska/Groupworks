@@ -15,14 +15,17 @@ public class Furniture
     private int numInStock; // simulation wont sell if this is 0; adds 1 every time made.
 
     // ICON IMAGES FOR BUTTONS
-    private ImageIcon dontHaveBlueprint; // disabledIcon
-    private ImageIcon haveBlueprint;
+    private ImageIcon icon; // disabledIcon
+    private ImageIcon hoverIcon;
+    private ImageIcon clickIcon;
+
+    // TODO have distinction between blueprint icon and build icon
     private ImageIcon makeFurniture;
 
 
     // ========================================
 
-    public Furniture(String furnitureName, int blueprintCost, int woodCost, int sellingPrice, boolean hasBlueprint) {
+    public Furniture(String furnitureName, int blueprintCost, int woodCost, int sellingPrice, boolean hasBlueprint, String iconFilepath, String hoverIconFilepath, String clickIconFilepath) {
 
         // LOGISTICS
         this.furnitureName = furnitureName;
@@ -33,6 +36,9 @@ public class Furniture
         numInStock = 0;
 
         // VISUALS
+        icon = new ImageIcon(iconFilepath);
+        hoverIcon = new ImageIcon(hoverIconFilepath);
+        clickIcon = new ImageIcon(clickIconFilepath);
 
     }
 
@@ -52,6 +58,18 @@ public class Furniture
 
     public int getSellingPrice() {
         return sellingPrice;
+    }
+
+    public ImageIcon getIcon() {
+        return icon;
+    }
+
+    public ImageIcon getHoverIcon() {
+        return hoverIcon;
+    }
+
+    public ImageIcon getClickIcon() {
+        return clickIcon;
     }
 
     public boolean hasBlueprint() {
