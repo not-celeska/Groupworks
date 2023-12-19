@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 public class GuiManager
 {
@@ -45,15 +44,18 @@ public class GuiManager
         gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
         gameWindow.add(gamePanel);
 
+        // MEDIUM
+
         // SMALLER PANELS
-        JPanel optionPanel = new JPanel(); // buy & advertise
+        JPanel buyAndAdvertise = new JPanel(); // buy & advertise
         JPanel buyingPanel = createBuyingPanel();
         JPanel makePanel = createMakePanel();
         JPanel blueprintPanel = createBlueprintPanel();
         JPanel infoPanel = createInfoPanel();
 
+
         // Add the  screen to the game window
-        gamePanel.add(optionPanel);
+        gamePanel.add(buyAndAdvertise);
         gamePanel.add(buyingPanel);
         gamePanel.add(makePanel);
         gamePanel.add(blueprintPanel);
