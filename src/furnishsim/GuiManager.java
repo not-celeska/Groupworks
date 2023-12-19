@@ -19,6 +19,9 @@ public class GuiManager
     JLabel numPostersInfo;
     JLabel numWoodInfo;
 
+    // IMAGES
+    ImageIcon boughtIcon = new ImageIcon("furnishResources/BOUGHT.png");
+
     public GuiManager(Business gameState)
     {
         this.gameState = gameState;
@@ -40,6 +43,7 @@ public class GuiManager
 
         // SMALLER PANELS
         JPanel optionPanel = new JPanel(); // buy & advertise
+        JPanel makePanel = createMakePanel();
         JPanel blueprintPanel = createBlueprintPanel();
         JPanel infoPanel = createInfoPanel();
 
@@ -80,20 +84,6 @@ public class GuiManager
         optionPanel.add(oneWood);
         optionPanel.add(tenWood);
 
-        // MAKE FURNITURE BUTTONS
-        for (Furniture furniture : gameState.getFurnitures()) {
-            JButton button = new JButton("MAKE " + furniture.getFurnitureName() + " [" + furniture.getWoodCost() + "]");
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    gameState.makeFurniture(furniture);
-                    System.out.println("made 1 " + furniture.getFurnitureName().toLowerCase());
-                    updateGUI();
-                }
-            });
-            optionPanel.add(button);
-        }
-
         JButton buyPosterButton = new JButton("BUY POSTER [" + (gameState.getNumPosters() + 1) + "]");
         buyPosterButton.addActionListener(new ActionListener() {
             @Override
@@ -107,6 +97,7 @@ public class GuiManager
 
         // Add the  screen to the game window
         gamePanel.add(optionPanel);
+        gamePanel.add(makePanel);
         gamePanel.add(blueprintPanel);
         gamePanel.add(infoPanel);
 
@@ -152,6 +143,33 @@ public class GuiManager
         return infoPanel;
     }
 
+    private JPanel createMakePanel()
+    {
+        JPanel makePanel = new JPanel();
+
+        // HEADER / TEXT
+        JLabel header = new JLabel("MAKE: ");
+        makePanel.add(header);
+
+        // BUTTONS
+        for (Furniture furniture : gameState.getFurnitures()) {
+            JButton button = new JButton("MAKE " + furniture.getFurnitureName() + " [" + furniture.getWoodCost() + "]");
+            button.setPreferredSize(new Dimension(48, 48));
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    gameState.makeFurniture(furniture);
+                    System.out.println("made 1 " + furniture.getFurnitureName().toLowerCase());
+                    updateGUI();
+                }
+            });
+            makePanel.add(button);
+        }
+
+        // RETURN
+        return makePanel;
+    }
+
     private JPanel createBlueprintPanel() {
         JPanel blueprintPanel = new JPanel();
 
@@ -160,10 +178,11 @@ public class GuiManager
         blueprintPanel.add(header);
 
         // BUTTONS
-        // make buy blueprint button
         for (Furniture furniture : gameState.getFurnitures()) {
             if (!furniture.hasBlueprint()) {
                 JButton buyBlueprintButton = new JButton("BUY BLUEPRINT " + furniture.getFurnitureName() + " [" + furniture.getBlueprintCost() + "$]");
+                buyBlueprintButton.setPreferredSize(new Dimension(48, 48));
+//                buyBlueprintButton.setPressedIcon();
                 buyBlueprintButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {

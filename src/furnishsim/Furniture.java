@@ -15,20 +15,25 @@ public class Furniture
     private int numInStock; // simulation wont sell if this is 0; adds 1 every time made.
 
     // ICON IMAGES FOR BUTTONS
-//    private ImageIcon dontHaveBlueprint;
-//    private ImageIcon haveBlueprint;
-//    private ImageIcon makeFurniture;
+    private ImageIcon dontHaveBlueprint; // disabledIcon
+    private ImageIcon haveBlueprint;
+    private ImageIcon makeFurniture;
 
 
     // ========================================
 
     public Furniture(String furnitureName, int blueprintCost, int woodCost, int sellingPrice, boolean hasBlueprint) {
+
+        // LOGISTICS
         this.furnitureName = furnitureName;
         this.blueprintCost = blueprintCost;
         this.woodCost = woodCost;
         this.sellingPrice = sellingPrice;
         this.hasBlueprint = hasBlueprint;
         numInStock = 0;
+
+        // VISUALS
+
     }
 
     // ========================================
