@@ -35,7 +35,7 @@ public class Business
     public Business()
     {
         companyName = "Industrial Furniture Inc.";
-        money = 1500;
+        money = 65000;
         wood = 0;
         ticksActive = 0;
         profit = 0;
@@ -270,6 +270,18 @@ public class Business
         return totalStock;
     }
 
+
+
+    public int getNumPosters()
+    {
+        return numberOfPosters;
+    }
+
+    public double getCustomerAttraction()
+    {
+        return customerAttraction;
+    }
+
     public String toString()
     {
         // all basic info
@@ -285,15 +297,32 @@ public class Business
         return businessData;
     }
 
-    public int getNumberOfPosters()
+    public int getBlueprintsUnlocked()
     {
-        return numberOfPosters;
+        int blueprintsUnlocked = 0;
+
+        for (Furniture furniture : furnitures)
+        {
+            if (furniture.hasBlueprint())
+            {
+                blueprintsUnlocked++;
+            }
+        }
+
+        return blueprintsUnlocked;
     }
 
-
-    public double getCustomerAttraction()
+    public int getMoney()
     {
-        return customerAttraction;
+        return money;
+    }
+
+    public int getWood() {
+        return wood;
+    }
+
+    public String getCompanyName() {
+        return companyName;
     }
 }
 

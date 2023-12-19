@@ -10,6 +10,14 @@ public class GuiManager
     JFrame gameWindow;
     JLabel businessData;
 
+    // INFORMATION LABELS
+    JLabel companyName;
+    JLabel moneyInfo;
+    JLabel popularityInfo; // tweaked version of customerAttraction
+    JLabel blueprintsUnlockedInfo;
+    JLabel numPostersInfo;
+    JLabel numWoodInfo;
+
     public GuiManager(Business gameState)
     {
         this.gameState = gameState;
@@ -24,15 +32,14 @@ public class GuiManager
         gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         gameWindow.setLocationRelativeTo(null);
 
-        // LAYOUT
-        // will do this next
+        // BIG PANEL
+        JPanel gamePanel = new JPanel();
+        gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
+        gameWindow.add(gamePanel);
 
-        // INFO SCREEN
-        JPanel infoScreen = new JPanel();
-
-        // BUSINESS TEXT
-        businessData = new JLabel();
-        updateGUI();
+        // SMALLER PANELS
+        JPanel optionPanel = new JPanel(); // buy & advertise
+        JPanel infoPanel = createInfoPanel();
 
         // TICK BUTTON
         JButton tickButton = new JButton("TICK");
@@ -67,10 +74,9 @@ public class GuiManager
         });
 
         // ADDING TO SCREEN & WINDOW
-        infoScreen.add(businessData);
-        infoScreen.add(tickButton);
-        infoScreen.add(oneWood);
-        infoScreen.add(tenWood);
+        optionPanel.add(tickButton);
+        optionPanel.add(oneWood);
+        optionPanel.add(tenWood);
 
         // MAKE FURNITURE BUTTONS
         for (Furniture furniture : gameState.getFurnitures()) {
@@ -83,7 +89,7 @@ public class GuiManager
                     updateGUI();
                 }
             });
-            infoScreen.add(button);
+            optionPanel.add(button);
         }
 
         // make buy blueprint button
@@ -100,12 +106,12 @@ public class GuiManager
                     }
                 });
                 // TODO unbuyable progression blueprints: use setEnabled(false)
-                infoScreen.add(buyBlueprintButton);
+                optionPanel.add(buyBlueprintButton);
             }
             // hide buy button if bought
         }
 
-        JButton buyPosterButton = new JButton("BUY POSTER [" + (gameState.getNumberOfPosters() + 1) + "]");
+        JButton buyPosterButton = new JButton("BUY POSTER [" + (gameState.getNumPosters() + 1) + "]");
         buyPosterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -114,23 +120,63 @@ public class GuiManager
                 updateGUI();
             }
         });
-        infoScreen.add(buyPosterButton);
+        optionPanel.add(buyPosterButton);
 
-        // Set layout to BoxLayout
-        infoScreen.setLayout(new BoxLayout(infoScreen, BoxLayout.Y_AXIS));
-
-        // Add the info screen to the game window
-        gameWindow.add(infoScreen);
+        // Add the  screen to the game window
+        gamePanel.add(optionPanel);
+        gamePanel.add(infoPanel);
 
         // Display the game window
         gameWindow.setVisible(true);
+        updateGUI();
     }
 
+    private JPanel createInfoPanel()
+    {
+        JPanel infoPanel = new JPanel(); // information
+
+        // LABELS
+
+        businessData = new JLabel();
+        infoPanel.add(businessData);
+
+        companyName = new JLabel();
+        infoPanel.add(companyName);
+
+        moneyInfo = new JLabel();
+        infoPanel.add(moneyInfo);
+
+        popularityInfo = new JLabel();
+        infoPanel.add(popularityInfo);
+
+        blueprintsUnlockedInfo = new JLabel();
+        infoPanel.add(blueprintsUnlockedInfo);
+
+        numPostersInfo = new JLabel();
+        infoPanel.add(numPostersInfo);
+
+        numWoodInfo = new JLabel();
+        infoPanel.add(numWoodInfo);
+
+        // LAYOUT
+
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+
+        // RETURN
+
+        return infoPanel;
+    }
 
     public void updateGUI()
     {
         // LABELS
-        businessData.setText(gameState.toString());
+        businessData.setText("---"/*gameState.toString()*/);
+        companyName.setText(gameState.getCompanyName());
+        moneyInfo.setText("MONEY: " + gameState.getMoney() + "$");
+        popularityInfo.setText("POPULARITY: " + Math.round(gameState.getCustomerAttraction() * 100) + "%");
+        blueprintsUnlockedInfo.setText("BLUEPRINTS UNLOCKED: " + gameState.getBlueprintsUnlocked());
+        numPostersInfo.setText("# OF POSTERS: " + gameState.getNumPosters());
+        numWoodInfo.setText("WOOD: " + gameState.getWood());
 
         /*
         labels <--
