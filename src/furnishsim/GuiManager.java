@@ -214,6 +214,7 @@ public class GuiManager
                         businessData.setText(gameState.toString());
                     }
                 });
+                // TODO unbuyable progression blueprints: use setEnabled(false)
                 infoScreen.add(buyBlueprintButton);
             }
             // hide buy button if bought

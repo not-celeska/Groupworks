@@ -19,9 +19,13 @@ public class Business
     private int profit; // TODO: -40 AT THE START.
     private int wood;
     final private int WOOD_PRICE = 2;
+    // TODO: ADD BALANCING CHANGES
     private Furniture[] furnitures = {
             new Furniture("Stool", 0, 3, 10, true),
-            new Furniture("Chair", 20, 10, 40, false)};
+            new Furniture("Chair", 20, 10, 40, false),
+            new Furniture("Table", 75, 40, 120, false),
+            new Furniture("Shelf", 230, 20, 100, false),
+            new Furniture("Mailbox", 750, 110 , 500, false)};
     private int ticksActive;
     private int customersInStore;
     private int enterPercentage; // <-- will change based off stage
@@ -35,7 +39,7 @@ public class Business
         wood = 0;
         ticksActive = 0;
         profit = 0;
-        enterPercentage = 70; // TODO will change based off stage
+        enterPercentage = 45; // TODO will change based off stage
         customerAttraction = 1.0;
         numberOfPosters = 0;
     }
@@ -45,6 +49,7 @@ public class Business
         // just update tick
         ticksActive++;
         runCustomerAI();
+        runEvent();
         
 
         /*
@@ -101,12 +106,7 @@ public class Business
     public void runCustomerAI()
     {
         // customer ai
-        double customerEnterPercentage = customerAttraction * enterPercentage; // [stage.getEnterPercentage] store popularity  ; TODO rename variable
-        if (aiBehaviours.nextDouble(0.0, 100.0) <= customerEnterPercentage)
-        {
-            customersInStore++; // this is not 100% enterance rate; is reduced
-            // TODO multiple people
-        }
+
 
         // will have to deal with when customer = 0;
         if (customersInStore > 0) {
@@ -114,13 +114,13 @@ public class Business
                 // checks stock
                 if (findTotalStock() == 0) {
                     System.out.println("Customer [" + customer + "] sees no items to buy --> left. Remaining customers: " + customersInStore);
-                    customersInStore -= 1; // TODO try to fix this :)
-                    customerAttraction -= 0.05;
+                    customersInStore -= 1;
+                    customerAttraction -= 0.025;
                     break;
                 }
                 else
                 {
-                    // 30%
+                    // TODO: make random selection; not in line. (tip, change order of if and for)
                     if (aiBehaviours.nextInt(1, 100) <= 30) {
                         // checks availibility in order; might randomize for realism later through random indexing [5-15min]
                         for (Furniture furniture : furnitures) {
@@ -146,7 +146,110 @@ public class Business
             System.out.println("No customers in the store yet..");
         }
 
+        double customerEnterPercentage = customerAttraction * enterPercentage; // [stage.getEnterPercentage] store popularity  ; TODO rename variable
+        if (aiBehaviours.nextDouble(0.0, 100.0) <= customerEnterPercentage)
+        {
+            customersInStore++; // this is not 100% enterance rate; is reduced
+            System.out.println("Person entered the store!");
+            // TODO multiple people
+        }
 
+    }
+
+    public void runEvent()
+    {
+        // probability of ANY event to happen: 10%
+        if (aiBehaviours.nextInt(1, 100) <= 5)
+        {
+            // another roll for which event happens (sections of 20+ intervals)
+            int eventToOccur = aiBehaviours.nextInt(1, 100);
+
+            if (eventToOccur <= 20)
+            {
+                // EVENT 1 | ROBBERY
+                // - money
+                // - customerAttraction
+                int moneyLost = aiBehaviours.nextInt(1, 75);
+                System.out.println("you lost " + moneyLost + "$ cuz robba rob u");
+                if ((money - moneyLost) <= 0)
+                {
+                    money = 0;
+                }
+                else
+                {
+                    money -= moneyLost;
+                }
+
+                // how could you get robbed so easily??
+                customerAttraction -= 0.1;
+
+            }
+            else if (eventToOccur <= 40)
+            {
+                // EVENT 2 | DISTANT RELATIVE [MILLIONARE] DIED
+                // + money
+                int moneyInherited;
+
+                // 2%
+                if (aiBehaviours.nextInt(1, 100) <= 2)
+                {
+                    System.out.print("yippee you is rich now!");
+                    moneyInherited = aiBehaviours.nextInt(1000, 100000);
+                }
+                else
+                {
+                    System.out.print("very rich distant relative passed away.. womp womp");
+                    moneyInherited = aiBehaviours.nextInt(500, 2000);
+                }
+                System.out.println(" + " + moneyInherited);
+                money += moneyInherited;
+
+
+            }
+            else if (eventToOccur <= 60)
+            {
+                // EVENT 3 | FURNITURE BREAKS
+                // random --> -= stock
+                System.out.println("you woulda lost some furniture if it wasnt for this tupoy programmer!");
+                // TODO
+            }
+            else if (eventToOccur <= 80)
+            {
+                // EVENT 4 | WARPED WOOD OR RATS GNAWED ON WOOD STOCK
+                int woodLost = aiBehaviours.nextInt(1, 75);
+                System.out.println("you lost " + woodLost + " wood cuz event said so");
+                if ((wood - woodLost) <= 0)
+                {
+                    wood = 0;
+                }
+                else
+                {
+                    wood -= woodLost;
+                }
+            }
+            else if (eventToOccur <=100)
+            {
+                // EVENT 5 | SOCIAL MEDIA INFLUENCER CRITISIZES OR PRAISES BRAND
+                // randomBoolean --> true: + customerAttraction --> false: -customers
+                if (aiBehaviours.nextBoolean())
+                {
+                    // GOT PRAISED!
+                    System.out.println("w rizz chat");
+                    customerAttraction += 0.5;
+                }
+                else
+                {
+                    // BOO! BAD INDUSTRIAL COMPANY!
+                    System.out.println("l rizz chat");
+                    customerAttraction -= 0.2;
+                }
+
+            }
+            else
+            {
+                System.out.println("uhh there was supposed to be an event..");
+            }
+        }
     }
 
 
