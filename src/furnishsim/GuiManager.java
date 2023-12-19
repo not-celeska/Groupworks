@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 public class GuiManager
 {
@@ -36,6 +37,9 @@ public class GuiManager
         gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         gameWindow.setLocationRelativeTo(null);
 
+//        gameWindow.setIconImage(); // LOGO
+        gameWindow.setName("ISC3U - FURNISH_SIM");
+
         // BIG PANEL
         JPanel gamePanel = new JPanel();
         gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
@@ -43,60 +47,14 @@ public class GuiManager
 
         // SMALLER PANELS
         JPanel optionPanel = new JPanel(); // buy & advertise
+        JPanel buyingPanel = createBuyingPanel();
         JPanel makePanel = createMakePanel();
         JPanel blueprintPanel = createBlueprintPanel();
         JPanel infoPanel = createInfoPanel();
 
-        // TICK BUTTON
-        JButton tickButton = new JButton("TICK");
-        tickButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gameState.tick();
-                System.out.println("Tick was called!");
-                updateGUI();
-            }
-        });
-
-        // BUY WOOD BUTTONS
-        JButton oneWood = new JButton("WOOD [1]");
-        oneWood.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gameState.buyWood(1);
-                System.out.println("bought 1 wood!");
-                updateGUI();
-            }
-        });
-
-        JButton tenWood = new JButton("WOOD [10]");
-        tenWood.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gameState.buyWood(10); // boolean for red button
-                System.out.println("bought 10 wood!");
-                updateGUI();
-            }
-        });
-
-        // ADDING TO SCREEN & WINDOW
-        optionPanel.add(tickButton);
-        optionPanel.add(oneWood);
-        optionPanel.add(tenWood);
-
-        JButton buyPosterButton = new JButton("BUY POSTER [" + (gameState.getNumPosters() + 1) + "]");
-        buyPosterButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gameState.putUpPoster();
-                System.out.println("Bought 1 poster! customer attraction now " + gameState.getCustomerAttraction());
-                updateGUI();
-            }
-        });
-        optionPanel.add(buyPosterButton);
-
         // Add the  screen to the game window
         gamePanel.add(optionPanel);
+        gamePanel.add(buyingPanel);
         gamePanel.add(makePanel);
         gamePanel.add(blueprintPanel);
         gamePanel.add(infoPanel);
@@ -153,7 +111,7 @@ public class GuiManager
 
         // BUTTONS
         for (Furniture furniture : gameState.getFurnitures()) {
-            JButton button = new JButton("MAKE " + furniture.getFurnitureName() + " [" + furniture.getWoodCost() + "]");
+            JButton button = new JButton(furniture.getFurnitureName().charAt(0) + "");
             button.setPreferredSize(new Dimension(48, 48));
             button.addActionListener(new ActionListener() {
                 @Override
@@ -213,6 +171,65 @@ public class GuiManager
 
     }
 
+    private JPanel createBuyingPanel()
+    {
+        JPanel buyingPanel = new JPanel();
+
+        // label
+        JLabel title = new JLabel("OPTIONS: ");
+        buyingPanel.add(title);
+
+        // TICK BUTTON
+        JButton tickButton = new JButton("TICK");
+        tickButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameState.tick();
+                System.out.println("Tick was called!");
+                updateGUI();
+            }
+        });
+
+        // BUY WOOD BUTTON
+        JButton buyWoodButton = new JButton();
+        buyWoodButton.setPreferredSize(new Dimension(48, 48));
+        buyWoodButton.setIcon(new ImageIcon("furnishResources/WOOD.png"));
+        buyWoodButton.setRolloverIcon(new ImageIcon("furnishResources/WOOD_HOVER.png"));
+        buyWoodButton.setPressedIcon(new ImageIcon("furnishResources/WOOD_PRESSED.png"));
+        buyWoodButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameState.buyWood(1);
+                System.out.println("bought 1 wood!");
+                updateGUI();
+            }
+        });
+
+
+        JButton buyPosterButton = new JButton();
+        buyPosterButton.setPreferredSize(new Dimension(64, 80));
+        buyPosterButton.setIcon(new ImageIcon("furnishResources/POSTER.png"));
+        buyPosterButton.setRolloverIcon(new ImageIcon("furnishResources/POSTER_HOVER.png"));
+        buyPosterButton.setPressedIcon(new ImageIcon("furnishResources/POSTER_PRESSED.png"));
+        buyPosterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameState.putUpPoster();
+                System.out.println("Bought 1 poster! customer attraction now " + gameState.getCustomerAttraction());
+                updateGUI();
+            }
+        });
+        buyingPanel.add(buyPosterButton);
+
+
+
+        // ADDING TO SCREEN & WINDOW
+        buyingPanel.add(tickButton);
+        buyingPanel.add(buyWoodButton);
+
+        return buyingPanel;
+    }
+
     public void updateGUI()
     {
         // LABELS
@@ -224,10 +241,8 @@ public class GuiManager
         numPostersInfo.setText("# OF POSTERS: " + gameState.getNumPosters());
         numWoodInfo.setText("WOOD: " + gameState.getWood());
 
-        /*
-        labels <--
-        buttons
-        images
+/*
+        images (stage)
         log
          */
 
