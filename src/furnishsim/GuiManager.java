@@ -190,7 +190,7 @@ public class GuiManager
                 buyBlueprintButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        // TODO: add identifier; "purchase unseccessful" through boolean; give feedback response
+                        // TODO: add purchase unsuccesful icon.
                         gameState.buyBlueprint(furniture);
                         if (furniture.hasBlueprint())
                         {
@@ -199,15 +199,11 @@ public class GuiManager
                         }
                         else
                         {
-                            System.out.println("failed to purchase");
+                            System.out.println("failed to purchase BLUEPRINT for: " + furniture.getFurnitureName().toUpperCase());
                         }
                         updateGUI();
-
-                        // if went well
-//                        buyBlueprintButton.setEnabled(false);
                     }
                 });
-                // TODO unbuyable progression blueprints: use setEnabled(false)
                 blueprintPanel.add(buyBlueprintButton);
             }
         }

@@ -22,10 +22,10 @@ public class Business
     // TODO: ADD BALANCING CHANGES
     private Furniture[] furnitures = { // TODO ADD THE REST OF THE ICONS
             /* new Furniture("Stool", 0, 3, 10, true),*/
-            new Furniture("Chair", 20, 10, 40, false, "furnishResources/CHAIR.png", "furnishResources/CHAIR_HOVER.png", "furnishResources/CHAIR_PRESSED.png") /* ,
-            new Furniture("Table", 75, 40, 120, false),
-            new Furniture("Shelf", 230, 20, 100, false),
-            new Furniture("Mailbox", 750, 110 , 500, false) */};
+            new Furniture("Chair", 20, 10, 40, false, "furnishResources/CHAIR.png", "furnishResources/CHAIR_HOVER.png", "furnishResources/CHAIR_PRESSED.png"),
+            new Furniture("Table", 75, 40, 120, false, "furnishResources/TABLE.png", "furnishResources/TABLE_HOVER.png", "furnishResources/TABLE_PRESSED.png"),
+            new Furniture("Shelf", 230, 20, 100, false, "furnishResources/SHELF.png", "furnishResources/SHELF_HOVER.png", "furnishResources/SHELF_PRESSED.png"),
+            new Furniture("Mailbox", 750, 110 , 500, false, "furnishResources/MAILBOX.png", "furnishResources/MAILBOX_HOVER.png", "furnishResources/MAILBOX_PRESSED.png") };
     private int ticksActive;
     private int customersInStore;
     private int enterPercentage; // <-- will change based off stage
@@ -35,7 +35,7 @@ public class Business
     public Business()
     {
         companyName = "Industrial Furniture Inc.";
-        money = 65000;
+        money = 150;
         wood = 0;
         ticksActive = 0;
         profit = 0;
