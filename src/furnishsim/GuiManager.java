@@ -430,6 +430,7 @@ public class GuiManager {
                 if (autoTickerActive)
                 {
                     gameState.tick();
+                    // also happens in the plain tick
                     consoleText.setText("> <AUTO> NEW TICK [" + gameState.getTicksActive() + "]");
                     updateGUI();
                 }
