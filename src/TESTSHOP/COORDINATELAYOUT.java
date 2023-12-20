@@ -1,5 +1,14 @@
 package TESTSHOP;
 
+/*
+EXAMPLE BUTTON:
+
+...initialize button...
+...settings (icons, size)...
+... set function (copy/paste)...
+ */
+
+
 import javax.swing.*;
 import java.awt.*;
 
