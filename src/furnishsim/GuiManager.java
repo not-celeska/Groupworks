@@ -47,9 +47,8 @@ public class GuiManager {
         gameWindow.setResizable(true);
         gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         gameWindow.setLocationRelativeTo(null);
-
-//        gameWindow.setIconImage(); // LOGO
         gameWindow.setName("ISC3U - FURNISH_SIM");
+
 
         // BIG PANEL
         JPanel gamePanel = new JPanel();
@@ -214,13 +213,15 @@ public class GuiManager {
         JLabel title = new JLabel("OPTIONS: ");
         buyingOptionPanel.add(title);
 
+
         // TICK BUTTON
         JButton tickButton = new JButton("TICK");
         tickButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameState.tick();
-                consoleText.setText(" > NEW TICK [" + gameState.getTicksActive() + "]");
+                gameState.setTicksActive(gameState.getTicksActive() + 1);
+                consoleText.setText(" # NEW TICK [" + gameState.getTicksActive() + "]");
+                consoleText.append(gameState.tick());
                 updateGUI();
             }
         });
@@ -429,9 +430,11 @@ public class GuiManager {
             public void run() {
                 if (autoTickerActive)
                 {
-                    gameState.tick();
                     // also happens in the plain tick
-                    consoleText.setText("> <AUTO> NEW TICK [" + gameState.getTicksActive() + "]");
+                    gameState.setTicksActive(gameState.getTicksActive() + 1);
+                    consoleText.setText("> (AUTO) NEW TICK [" + gameState.getTicksActive() + "]\n");
+                    consoleText.append(gameState.tick());
+
                     updateGUI();
                 }
             }

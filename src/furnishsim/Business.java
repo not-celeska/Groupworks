@@ -50,13 +50,17 @@ public class Business
         numberOfPosters = 0;
     }
 
-    public void tick()
+    public String tick()
     {
-        // just update tick
-        ticksActive++;
-        runCustomerAI();
-        runEvent();
+        String tickUpdates = "\n";
 
+        // Run customer ai; entering store, leaving, buying;
+        tickUpdates += runCustomerAI();
+
+        // Run event probability.
+        tickUpdates += runEvent();
+
+        return tickUpdates;
 
         /*
         this will be called from gui; kind of like an "update" method
@@ -68,22 +72,21 @@ public class Business
          */
     }
 
-    public void runCustomerAI()
+    public String runCustomerAI()
     {
-        // customer ai
+        String customerUpdates = "";
 
-
-        // will have to deal with when customer = 0;
+        // CUSTOMER PURCHASING
         if (customersInStore > 0) {
             for (int customer = 1; customer <= customersInStore; customer++) {
                 // checks stock
-                if (findTotalStock() == 0) {
-
-                    System.out.println("Customer [" + customer + "] sees no items to buy --> left. Remaining customers: " + customersInStore);
+                if (findTotalStock() == 0) { //  no stock TODO say how many customers in store
+                    customerUpdates += "[CUSTOMER] NO ITEMS IN STOCK: CUSTOMER LEFT\n";
                     customersInStore -= 1;
                     customerAttraction -= 0.025;
                     break;
                 }
+                // there are people in the store
                 else
                 {
                     // TODO: make random selection; not in line. (tip, change order of if and for)
@@ -92,9 +95,8 @@ public class Business
                         for (Furniture furniture : furnitures) {
                             if (furniture.getNumInStock() > 0) {
                                 money += furniture.getSellingPrice();
-                                profit += furniture.getSellingPrice();
                                 furniture.setNumInStock(furniture.getNumInStock() - 1);
-                                System.out.println(furniture.getFurnitureName() + " was bought! [ +" + furniture.getSellingPrice() + "$ | " + "- 1 unit ]");
+                                customerUpdates += "[TRANSACTION] " + furniture.getFurnitureName().toUpperCase() + " WAS BOUGHT | - 1 UNIT | + " + furniture.getSellingPrice() + "$\n";
                                 customersInStore--;
                                 break;
                             }
@@ -102,28 +104,31 @@ public class Business
                     }
                     else
                     {
-                        System.out.println("Customer [" + customer + "] just walking around.");
+                        customerUpdates += "[CUSTOMERS] CURRENTLY IN STORE: " + customersInStore + "\n";
                     }
                 }
             }
         }
         else
         {
-            System.out.println("No customers in the store yet..");
+            customerUpdates += "[CUSTOMERS] NO CUSTOMERS IN STORE\n";
         }
 
         double customerEnterPercentage = customerAttraction * enterPercentage; // [stage.getEnterPercentage] store popularity  ; TODO rename variable
         if (aiBehaviours.nextDouble(0.0, 100.0) <= customerEnterPercentage)
         {
-            customersInStore++; // this is not 100% enterance rate; is reduced
-            System.out.println("Person entered the store!");
+            customersInStore++;
+            customerUpdates += "[CUSTOMER] ENTERED STORE\n";
             // TODO multiple people
         }
 
+        return customerUpdates;
     }
 
-    public void runEvent()
+    public String runEvent()
     {
+        String eventUpdates = "";
+
         // probability of ANY event to happen: 10%
         if (aiBehaviours.nextInt(1, 100) <= 5)
         {
@@ -136,7 +141,7 @@ public class Business
                 // - money
                 // - customerAttraction
                 int moneyLost = aiBehaviours.nextInt(1, 75);
-                System.out.println("you lost " + moneyLost + "$ cuz robba rob u");
+                eventUpdates += "[EVENT] YOU WERE ROBBED | - " + moneyLost + "$ |";
                 if ((money - moneyLost) <= 0)
                 {
                     money = 0;
@@ -159,31 +164,30 @@ public class Business
                 // 2%
                 if (aiBehaviours.nextInt(1, 100) <= 2)
                 {
-                    System.out.print("yippee you is rich now!");
+                    eventUpdates += "[EVENT] A VERY RICH RELATIVE PASSED AWAY |";
                     moneyInherited = aiBehaviours.nextInt(500, 2000);
                 }
                 else
                 {
-                    System.out.print("very rich distant relative passed away.. womp womp");
+                    eventUpdates += "[EVENT] A DISTANT RELATIVE PASSED AWAY |";
                     moneyInherited = aiBehaviours.nextInt(50, 250);
                 }
-                System.out.println(" + " + moneyInherited);
+                eventUpdates += " + " + moneyInherited + "$ |";
                 money += moneyInherited;
-
 
             }
             else if (eventToOccur <= 60)
             {
                 // EVENT 3 | FURNITURE BREAKS
                 // random --> -= stock
-                System.out.println("you woulda lost some furniture if it wasnt for this tupoy programmer!");
+                eventUpdates = "[EVENT] you woulda lost some furniture if it wasnt for this tupoy programmer!";
                 // TODO
             }
             else if (eventToOccur <= 80)
             {
                 // EVENT 4 | WARPED WOOD OR RATS GNAWED ON WOOD STOCK
                 int woodLost = aiBehaviours.nextInt(1, 75);
-                System.out.println("you lost " + woodLost + " wood cuz event said so");
+                eventUpdates += "[EVENT] RATS GNAWED ON WOOD | - " + woodLost + " |";
                 if ((resources[WOOD] - woodLost) <= 0)
                 {
                     resources[WOOD] = 0;
@@ -200,22 +204,24 @@ public class Business
                 if (aiBehaviours.nextBoolean())
                 {
                     // GOT PRAISED!
-                    System.out.println("w rizz chat");
+                    eventUpdates += "[EVENT] \"w rizz chat\" | YOU WENT VIRAL |";
                     customerAttraction += 0.5;
                 }
                 else
                 {
                     // BOO! BAD INDUSTRIAL COMPANY!
-                    System.out.println("l rizz chat");
+                    eventUpdates += "[EVENT] \"industrial revolution tiktok slideshow\" | YOUR REPUTATION WENT DOWN |";
                     customerAttraction -= 0.2;
                 }
 
             }
             else
             {
-                System.out.println("uhh there was supposed to be an event..");
+                eventUpdates += "[EVENT] uhh there was supposed to be an event..";
             }
         }
+
+        return eventUpdates;
     }
 
     // ========================
@@ -284,10 +290,6 @@ public class Business
             numberOfPosters++;
         }
     }
-
-
-
-
 
 
     public Furniture[] getFurnitures() {
