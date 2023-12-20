@@ -12,7 +12,6 @@ public class Business
     private Random aiBehaviours = new Random();
     // =======================
 
-
     private String companyName;
     private boolean storeBought;
     private double customerAttraction;
@@ -82,6 +81,7 @@ public class Business
             for (int customer = 1; customer <= customersInStore; customer++) {
                 // checks stock
                 if (findTotalStock() == 0) {
+
                     System.out.println("Customer [" + customer + "] sees no items to buy --> left. Remaining customers: " + customersInStore);
                     customersInStore -= 1;
                     customerAttraction -= 0.025;
@@ -328,6 +328,14 @@ public class Business
         }
 
         return businessData;
+    }
+
+    public int getTicksActive() {
+        return ticksActive;
+    }
+
+    public void setTicksActive(int ticksActive) {
+        this.ticksActive = ticksActive;
     }
 
     public int getBlueprintsUnlocked()

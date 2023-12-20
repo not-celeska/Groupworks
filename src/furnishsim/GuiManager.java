@@ -16,6 +16,9 @@ public class GuiManager {
     Timer autoTickerTimer;
     boolean autoTickerActive = false;
 
+    // textArea
+    JTextArea consoleText;
+
     // INFORMATION LABELS
     JLabel companyName;
     JLabel moneyInfo;
@@ -60,11 +63,15 @@ public class GuiManager {
         JPanel blueprintPanel = createBlueprintPanel();
         JPanel infoPanel = createInfoPanel();
 
+        consoleText = new JTextArea();
+
+        consoleText.setBackground(Color.pink);
         // Add the  screen to the game window
         gamePanel.add(buyAndAdvertise);
         gamePanel.add(buyingPanel);
         gamePanel.add(makePanel);
         gamePanel.add(blueprintPanel);
+        gamePanel.add(consoleText);
         gamePanel.add(infoPanel);
 
         // creates the auto ticker
@@ -72,6 +79,8 @@ public class GuiManager {
 
         // Display the game window
         gameWindow.setVisible(true);
+        writeInConsole(" > Simulation is open!\n" +
+                           "       -   Welcome! Have fun!");
         updateGUI();
     }
 
@@ -135,7 +144,8 @@ public class GuiManager {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     gameState.makeFurniture(furniture);
-                    System.out.println("made 1 " + furniture.getFurnitureName().toLowerCase());
+                    // TODO if successful
+                    writeInConsole("[MADE] 1 " + furniture.getFurnitureName().toUpperCase());
                     updateGUI();
                 }
             });
@@ -168,10 +178,10 @@ public class GuiManager {
                     public void actionPerformed(ActionEvent e) {
                         gameState.buyBlueprint(furniture);
                         if (furniture.hasBlueprint()) {
-                            System.out.println("bought blueprint for " + furniture.getFurnitureName().toLowerCase());
+                            writeInConsole("[BLUEPRINT] BOUGHT " + furniture.getFurnitureName().toUpperCase());
                             buyBlueprintButton.setEnabled(false);
                         } else {
-                            System.out.println("failed to purchase BLUEPRINT for: " + furniture.getFurnitureName().toUpperCase());
+                            writeInConsole("[BLUEPRINT] FAILED TO BUY " + furniture.getFurnitureName().toUpperCase());
                         }
                         updateGUI();
                     }
@@ -198,7 +208,7 @@ public class GuiManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gameState.tick();
-                System.out.println("Tick was called!");
+                writeInConsole("\n > NEW TICK [" + gameState.getTicksActive() + "]");
                 updateGUI();
             }
         });
@@ -210,8 +220,15 @@ public class GuiManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 autoTickerActive = !(autoTickerActive);
-                System.out.println("autoTicker is now: " + autoTickerActive);
-                // on and off icon
+                String onOff = "| DISABLED |";
+                if (autoTickerActive)
+                {
+                    onOff = "| ENABLED |";
+                }
+
+                writeInConsole("[AUTOTICKER] " + onOff);
+
+                // TODO on and off icon
 
                 updateGUI();
             }
@@ -229,7 +246,8 @@ public class GuiManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gameState.buyResource(1, gameState.WOOD);
-                System.out.println("bought 1 wood!");
+                // TODO check if went through
+                writeInConsole("[PURCHASE] BOUGHT 1 WOOD");
                 updateGUI();
             }
         });
@@ -245,7 +263,7 @@ public class GuiManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gameState.buyResource(1, gameState.NAILS);
-                System.out.println("bought 1 nail!");
+                writeInConsole("[PURCHASE] BOUGHT 1 NAIL");
                 updateGUI();
             }
         });
@@ -260,7 +278,7 @@ public class GuiManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gameState.buyResource(1, gameState.SCREWS);
-                System.out.println("bought 1 screw!");
+                writeInConsole("[PURCHASE] BOUGHT 1 SCREW");
                 updateGUI();
             }
         });
@@ -275,7 +293,7 @@ public class GuiManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gameState.buyResource(1, gameState.HARDBOARD);
-                System.out.println("bought 1 hardwood!");
+                writeInConsole("[PURCHASE] BOUGHT 1 HARDBOARD");
                 updateGUI();
             }
         });
@@ -294,9 +312,10 @@ public class GuiManager {
 
                 gameState.buyStore();
                 if (gameState.isBoughtStore()) {
-                    System.out.println("BOUGHT STORE! CONGRATS!");
+                    writeInConsole("[STORE-PURCHASE] BOUGHT STORE SUCCESSFULLY." +
+                                "\n  > CONGRATS PLAYER, YOU WON!");
                 } else {
-                    System.out.println("FAILED TO BUY STORE.");
+                    writeInConsole("[STORE-PURCHASE] FAILED TO BUY STORE");
                 }
                 updateGUI();
             }
@@ -314,7 +333,8 @@ public class GuiManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gameState.putUpPoster();
-                System.out.println("Bought 1 poster! customer attraction now " + gameState.getCustomerAttraction());
+                // TODO check here
+                writeInConsole("[ADVERTISEMENT] PUT UP ONE POSTER");
                 updateGUI();
             }
         });
@@ -344,12 +364,16 @@ public class GuiManager {
                 if (autoTickerActive)
                 {
                     gameState.tick();
+                    writeInConsole("\n > <AUTO> NEW TICK [" + gameState.getTicksActive() + "]");
                     updateGUI();
                 }
             }
         }, 2000, 2000);
     }
 
+    public void writeInConsole(String message) {
+        consoleText.append("\n" + message);
+    }
 
     public void updateGUI() {
         // LABELS
