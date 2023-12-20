@@ -277,11 +277,27 @@ public class COORDINATELAYOUT
 
         backgroundPanel.add(backgroundImg);
 
+        JButton tickButton = new JButton("TICK");
+        tickButton.setBounds(490, 289, 75, 20);
+        backgroundPanel.add(tickButton);
 
+        JButton autoTickerToggle = new JButton("AUTO");
+        autoTickerToggle.setBounds(767, 289, 75, 20);
+        backgroundPanel.add(autoTickerToggle);
 
         /*
          * IMPORTANT: DRAW THE CONSOLE AFTER THIS
          */
+        JTextArea consoleText = new JTextArea();
+        consoleText.setBackground(Color.black);
+        consoleText.setFont(new Font("Monospaced", Font.BOLD, 14));
+        consoleText.setForeground(Color.green);
+        consoleText.append("Updates will go here");
+        consoleText.setEditable(false);
+        consoleText.setBounds(483, 325, 377, 275);
+        backgroundPanel.add(consoleText);
+
+//         consoleCover.setBounds(483, 274, 366, 51);
 
 
         // Add the background panel to the JFrame
