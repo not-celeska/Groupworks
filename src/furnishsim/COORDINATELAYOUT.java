@@ -22,7 +22,7 @@ public class COORDINATELAYOUT
      * TEXT AREAS
      */
 
-    static JTextArea poster = new JTextArea();
+    static JTextArea posterText = new JTextArea();
 
     static JLabel stools = new JLabel();
     static JLabel chairs = new JLabel();
@@ -212,8 +212,12 @@ public class COORDINATELAYOUT
          * DRAW TEXT TO SCREEN
          */
 
-        poster.setBounds(122, 414, 100, 30); // x, y, width, height
-        backgroundPanel.add(poster);
+        posterText.setBounds(122, 414, 100, 50); // x, y, width, height
+        posterText.setEditable(false);
+        posterText.setFont(new Font("Monospaced", Font.BOLD, 14));
+        posterText.setForeground(Color.black);
+        backgroundPanel.add(posterText);
+
 
         stools.setBounds(327, 230, 100, 30); // x, y, width, height
         backgroundPanel.add(stools);
@@ -304,6 +308,10 @@ public class COORDINATELAYOUT
     }
 
     public static void ButtonListeners() {
+        /*
+         * For loops for buying blueprints and building things
+         */
+
         for (int i = 0; i < workshopButtons.length; i++) {
             Furniture furniture = gamestate.getFurnitures()[i];
             int furNum = i;
@@ -347,7 +355,7 @@ public class COORDINATELAYOUT
     }
 
     public static void updateGUI() {
-        poster.setText("$" + gamestate.getPosterCost() + ":\nPut up poster");
+        posterText.setText("$" + gamestate.getPosterCost() + ":\nPut up poster");
         stools.setText(String.valueOf(gamestate.getFurnitures()[gamestate.STOOLS].getNumInStock()) + " owned");
         chairs.setText(String.valueOf(gamestate.getFurnitures()[gamestate.CHAIRS].getNumInStock()) + " owned");
         tables.setText(String.valueOf(gamestate.getFurnitures()[gamestate.TABLES].getNumInStock()) + " owned");
