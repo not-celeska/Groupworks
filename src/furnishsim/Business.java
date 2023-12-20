@@ -1,5 +1,6 @@
 package furnishsim;
 
+import javax.swing.*;
 import java.util.Random;
 
 /**
@@ -18,14 +19,17 @@ public class Business
     private double money;
     private int profit; // TODO: -40 AT THE START.
     private int[] resources;
-    final private int WOOD_PRICE = 2;
+    private double[] resourcePrice = {8.0, 0.15, 0.05, 32};
+    final private double STORE_PRICE = 8500.0;
+    private boolean boughtStore = false;
     final public int WOOD = 0;
-    final public int NAILS = 1;
-    final public int SCREWS = 2;
+    final public int NAIL = 1;
+    final public int SCREW = 2;
     final public int HARDWOOD = 3;
-    // TODO: ADD BALANCING CHANGES
-    private Furniture[] furnitures = { // TODO ADD THE REST OF THE ICONS
-            /* new Furniture("Stool", 0, 3, 10, true),*/
+
+    private ImageIcon stageBackground;
+
+    private Furniture[] furnitures = {
             new Furniture("Stool", 0.0, new int[] {2, 4, 0, 0}, 17.6, false, "furnishResources/STOOL.png", "furnishResources/STOOL_HOVER.png", "furnishResources/STOOL_PRESSED.png"),
             new Furniture("Chair", 200.0, new int[] {3, 6, 4, 0}, 25.1, false, "furnishResources/CHAIR.png", "furnishResources/CHAIR_HOVER.png", "furnishResources/CHAIR_PRESSED.png"),
             new Furniture("Table", 400, new int[] {8, 4, 8, 1}, 96.8, false, "furnishResources/TABLE.png", "furnishResources/TABLE_HOVER.png", "furnishResources/TABLE_PRESSED.png"),
@@ -47,6 +51,8 @@ public class Business
         enterPercentage = 45; // STAGE 1 STAT.
         customerAttraction = 1.0;
         numberOfPosters = 0;
+
+        // TODO setStage image here
     }
 
     public void tick()
@@ -217,13 +223,12 @@ public class Business
     }
 
     // ========================
-    public void buyWood(int quantity)
+    public void buyResource(int quantity, int resourceIndex) // (1, gameState.WOOD)
     {
-        // price = 2$
-        if (money >= (WOOD_PRICE * quantity))
+        if (money >= (resourcePrice[resourceIndex] * quantity))
         {
-            money -= (WOOD_PRICE * quantity);
-            resources[WOOD] += quantity;
+            money -= (resourcePrice[resourceIndex] * quantity);
+            resources[resourceIndex] += quantity;
         }
     }
 
@@ -255,13 +260,22 @@ public class Business
         }
     }
 
-    public void buyStore() {
+    public void buyStore()
+    {
+        if (money >= STORE_PRICE)
+        {
+            money -= STORE_PRICE;
+            enterPercentage = 80;
 
+            boughtStore = true;
+        }
     }
 
 
-
-
+    public boolean isBoughtStore()
+    {
+        return boughtStore;
+    }
 
     public Furniture[] getFurnitures() {
         return furnitures;
@@ -294,7 +308,7 @@ public class Business
     public String toString()
     {
         // all basic info
-        String businessData = companyName.toUpperCase() + " | " + "MONEY: " + money + "$ | WOOD: " + resources[WOOD] + " | NAILS: " + resources[NAILS] + " | SCREWS: " + resources[SCREWS] + " | HARDWOOD: " + resources[HARDWOOD] +
+        String businessData = companyName.toUpperCase() + " | " + "MONEY: " + money + "$ | WOOD: " + resources[WOOD] + " | NAILS: " + resources[NAIL] + " | SCREWS: " + resources[SCREW] + " | HARDWOOD: " + resources[HARDWOOD] +
                 " | TICKS SINCE START: " + ticksActive + " | TOTAL STOCK: " + findTotalStock() + " | CUSTOMERS IN STORE: " + customersInStore + " | TOTAL PROFITS: " + profit + " | CUSTOMER ATTRACTION: " + customerAttraction + " | ";
 
         // stock
@@ -323,7 +337,7 @@ public class Business
 
     public double getMoney()
     {
-        return money;
+        return Math.round(1000.0 * money) / 1000.0;
     }
 
     public int[] getResources() {
@@ -333,8 +347,6 @@ public class Business
     public String getCompanyName() {
         return companyName;
     }
-
-
 
     // utility
     public boolean listIsGreater(int[] list1, int[] list2) { // returns true if list1's elements are all greater than or equal to list2's

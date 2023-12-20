@@ -18,6 +18,9 @@ public class GuiManager
     JLabel blueprintsUnlockedInfo;
     JLabel numPostersInfo;
     JLabel numWoodInfo;
+    JLabel numNailInfo;
+    JLabel numScrewInfo;
+    JLabel numHardwoodInfo;
 
     // IMAGES
     ImageIcon boughtIcon = new ImageIcon("furnishResources/BOUGHT.png");
@@ -68,7 +71,7 @@ public class GuiManager
     private JPanel createInfoPanel()
     {
         JPanel infoPanel = new JPanel(); // information
-        infoPanel.setBackground(Color.BLUE);
+        infoPanel.setBackground(Color.lightGray);
 
         // LABELS
 
@@ -92,6 +95,15 @@ public class GuiManager
 
         numWoodInfo = new JLabel();
         infoPanel.add(numWoodInfo);
+
+        numNailInfo = new JLabel();
+        infoPanel.add(numNailInfo);
+
+        numScrewInfo = new JLabel();
+        infoPanel.add(numScrewInfo);
+
+        numHardwoodInfo = new JLabel();
+        infoPanel.add(numHardwoodInfo);
 
         // LAYOUT
 
@@ -129,7 +141,8 @@ public class GuiManager
         return makePanel;
     }
 
-    private JPanel createBlueprintPanel() {
+    private JPanel createBlueprintPanel()
+    {
         JPanel blueprintPanel = new JPanel();
 
         // HEADER / TEXT
@@ -149,7 +162,6 @@ public class GuiManager
                 buyBlueprintButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        // TODO: add purchase unsuccesful icon.
                         gameState.buyBlueprint(furniture);
                         if (furniture.hasBlueprint())
                         {
@@ -191,6 +203,7 @@ public class GuiManager
             }
         });
 
+        // TODO add 1 or 10 per button through
         // BUY WOOD BUTTON
         JButton buyWoodButton = new JButton();
         buyWoodButton.setPreferredSize(new Dimension(48, 48));
@@ -200,12 +213,85 @@ public class GuiManager
         buyWoodButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameState.buyWood(1);
+                gameState.buyResource(1, gameState.WOOD);
                 System.out.println("bought 1 wood!");
                 updateGUI();
             }
         });
 
+
+        // BUY NAILS BUTTOn
+        JButton buyNailButton = new JButton();
+        buyNailButton.setPreferredSize(new Dimension(48, 48));
+        buyNailButton.setIcon(new ImageIcon("furnishResources/NAIL.png"));
+        buyNailButton.setRolloverIcon(new ImageIcon("furnishResources/NAIL_HOVER.png"));
+        buyNailButton.setPressedIcon(new ImageIcon("furnishResources/NAIL_PRESSED.png"));
+        buyNailButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameState.buyResource(1, gameState.NAIL);
+                System.out.println("bought 1 nail!");
+                updateGUI();
+            }
+        });
+
+        // BUY SCREWS BUTTON
+        JButton buyScrewsButton = new JButton();
+        buyScrewsButton.setPreferredSize(new Dimension(48, 48));
+        buyScrewsButton.setIcon(new ImageIcon("furnishResources/SCREWS.png"));
+        buyScrewsButton.setRolloverIcon(new ImageIcon("furnishResources/SCREWS_HOVER.png"));
+        buyScrewsButton.setPressedIcon(new ImageIcon("furnishResources/SCREWS_PRESSED.png"));
+        buyScrewsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameState.buyResource(1, gameState.SCREW);
+                System.out.println("bought 1 screw!");
+                updateGUI();
+            }
+        });
+
+        // hardwood
+        JButton buyHardwoodButton = new JButton();
+        buyHardwoodButton.setPreferredSize(new Dimension(48, 48));
+        buyHardwoodButton.setIcon(new ImageIcon("furnishResources/HARDWOOD.png"));
+        buyHardwoodButton.setRolloverIcon(new ImageIcon("furnishResources/HARDWOOD_HOVER.png"));
+        buyHardwoodButton.setPressedIcon(new ImageIcon("furnishResources/HARDWOOD_PRESSED.png"));
+        buyHardwoodButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameState.buyResource(1, gameState.HARDWOOD);
+                System.out.println("bought 1 hardwood!");
+                updateGUI();
+            }
+        });
+
+
+        // store
+        JButton buyStoreButton = new JButton();
+        buyStoreButton.setPreferredSize(new Dimension(144, 48));
+        buyStoreButton.setIcon(new ImageIcon("furnishResources/STORE.png"));
+        buyStoreButton.setRolloverIcon(new ImageIcon("furnishResources/STORE_HOVER.png"));
+        buyStoreButton.setPressedIcon(new ImageIcon("furnishResources/STORE_PRESSED.png"));
+        buyStoreButton.setDisabledIcon(new ImageIcon("furnishResources/STORE_BOUGHT.png"));
+        buyStoreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                gameState.buyStore();
+                if (gameState.isBoughtStore())
+                {
+                    System.out.println("BOUGHT STORE! CONGRATS!");
+                }
+                else
+                {
+                    System.out.println("FAILED TO BUY STORE.");
+                }
+                updateGUI();
+            }
+        });
+
+
+        // poster
 
         JButton buyPosterButton = new JButton();
         buyPosterButton.setPreferredSize(new Dimension(64, 80));
@@ -226,7 +312,11 @@ public class GuiManager
 
         // ADDING TO SCREEN & WINDOW
         buyingPanel.add(tickButton);
+        buyingPanel.add(buyNailButton);
+        buyingPanel.add(buyScrewsButton);
         buyingPanel.add(buyWoodButton);
+        buyingPanel.add(buyHardwoodButton);
+        buyingPanel.add(buyStoreButton);
 
         return buyingPanel;
     }
@@ -236,11 +326,14 @@ public class GuiManager
         // LABELS
         businessData.setText("---"/*gameState.toString()*/);
         companyName.setText(gameState.getCompanyName());
-        moneyInfo.setText("MONEY: " + gameState.getMoney() + "$");
+    moneyInfo.setText("MONEY: " + gameState.getMoney() + "$");
         popularityInfo.setText("POPULARITY: " + Math.round(gameState.getCustomerAttraction() * 100) + "%");
         blueprintsUnlockedInfo.setText("BLUEPRINTS UNLOCKED: " + gameState.getBlueprintsUnlocked());
         numPostersInfo.setText("# OF POSTERS: " + gameState.getNumPosters());
         numWoodInfo.setText("WOOD: " + gameState.getResources()[gameState.WOOD]);
+        numNailInfo.setText("NAIL: " + gameState.getResources()[gameState.NAIL]);
+        numScrewInfo.setText("SCREW: " + gameState.getResources()[gameState.SCREW]);
+        numHardwoodInfo.setText("HARDWOOD: " + gameState.getResources()[gameState.HARDWOOD]);
 
 /*
         images (stage)
