@@ -18,6 +18,7 @@ public class GuiManager {
 
     // textArea
     JTextArea consoleText;
+    JScrollPane consoleScrollPane;
 
     // INFORMATION LABELS
     JLabel companyName;
@@ -63,9 +64,19 @@ public class GuiManager {
         JPanel blueprintPanel = createBlueprintPanel();
         JPanel infoPanel = createInfoPanel();
 
+//        JPanel consolePanel = new JPanel();
+//        consolePanel.setMaximumSize(new Dimension( 500, 200));
         consoleText = new JTextArea();
-
+        consoleText.setEditable(false);
+//        consolePanel.add(consoleText);
         consoleText.setBackground(Color.pink);
+//        consoleText.setBounds(300, 300, 400, 400);
+//        consoleScrollPane = new JScrollPane(consoleText, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+//                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+//        consolePanel.add(consoleScrollPane);
+
+
+
         // Add the  screen to the game window
         gamePanel.add(buyAndAdvertise);
         gamePanel.add(buyingPanel);
@@ -178,7 +189,7 @@ public class GuiManager {
                     public void actionPerformed(ActionEvent e) {
                         gameState.buyBlueprint(furniture);
                         if (furniture.hasBlueprint()) {
-                            writeInConsole("[BLUEPRINT] BOUGHT " + furniture.getFurnitureName().toUpperCase());
+                            writeInConsole("[BLUEPRINT] BOUGHT " + furniture.getFurnitureName().toUpperCase() + " SUCCESSFULLY");
                             buyBlueprintButton.setEnabled(false);
                         } else {
                             writeInConsole("[BLUEPRINT] FAILED TO BUY " + furniture.getFurnitureName().toUpperCase());

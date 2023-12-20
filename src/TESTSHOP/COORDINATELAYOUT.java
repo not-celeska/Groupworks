@@ -288,6 +288,16 @@ public class COORDINATELAYOUT
         /*
          * IMPORTANT: DRAW THE CONSOLE AFTER THIS
          */
+        JTextArea consoleText = new JTextArea();
+        consoleText.setBackground(Color.black);
+        consoleText.setFont(new Font("Monospaced", Font.BOLD, 14));
+        consoleText.setForeground(Color.green);
+        consoleText.append("Updates will go here");
+        consoleText.setEditable(false);
+        consoleText.setBounds(483, 325, 377, 275);
+        backgroundPanel.add(consoleText);
+
+//         consoleCover.setBounds(483, 274, 366, 51);
 
 
         // Add the background panel to the JFrame
