@@ -13,7 +13,7 @@ public class COORDINATELAYOUT
     public void makeUI()
     {
         JFrame window = new JFrame();
-        window.setSize(850, 600);
+        window.setSize(865, 639);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(true);
 
@@ -196,9 +196,37 @@ public class COORDINATELAYOUT
         backgroundPanel.add(buyMailboxButton2);
 
 
-        JLabel money = new JLabel("150$");
-        money.setBounds(54, 523, 100, 30); // x, y, width, height
+        JLabel money = new JLabel("$XX.XX");
+        money.setBounds(54, 525, 100, 30); // x, y, width, height
         backgroundPanel.add(money);
+
+        JLabel popularity = new JLabel("X.XX");
+        popularity.setBounds(85, 540, 100, 30); // x, y, width, height
+        backgroundPanel.add(popularity);
+
+        JLabel blueprints = new JLabel("X");
+        blueprints.setBounds(145, 555, 100, 30); // x, y, width, height
+        backgroundPanel.add(blueprints);
+
+        JLabel posters = new JLabel("XX");
+        posters.setBounds(106, 570, 100, 30); // x, y, width, height
+        backgroundPanel.add(posters);
+
+        JLabel wood = new JLabel("XXX");
+        wood.setBounds(210, 525, 100, 30); // x, y, width, height
+        backgroundPanel.add(wood);
+
+        JLabel nails = new JLabel("XXX");
+        nails.setBounds(225, 540, 100, 30); // x, y, width, height
+        backgroundPanel.add(nails);
+
+        JLabel screws = new JLabel("XXX");
+        screws.setBounds(211, 555, 100, 30); // x, y, width, height
+        backgroundPanel.add(screws);
+
+        JLabel hardboard = new JLabel("XXX");
+        hardboard.setBounds(250, 570, 100, 30); // x, y, width, height
+        backgroundPanel.add(hardboard);
 
         // Add the background panel to the JFrame
         window.add(backgroundPanel);
