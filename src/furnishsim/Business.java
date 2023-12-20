@@ -47,7 +47,7 @@ public class Business
     public Business()
     {
         companyName = "Industrial Furniture Inc.";
-        money = 150;
+        money = 150000;
         storeBought = false;
         ticksActive = 0;
         profit = 0;
@@ -267,6 +267,8 @@ public class Business
     public void buyStore() {
         if (money >= 8500) {
             storeBought = true;
+            money -= 8500;
+            enterPercentage = 70;
         }
     }
 

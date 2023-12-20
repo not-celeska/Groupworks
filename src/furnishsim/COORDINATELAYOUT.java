@@ -41,6 +41,7 @@ public class COORDINATELAYOUT
     static JLabel screws = new JLabel();
     static JLabel hardboard = new JLabel();
     static JTextArea consoleText = new JTextArea();
+    static JLabel backgroundImg = new JLabel();
 
 
 
@@ -73,7 +74,7 @@ public class COORDINATELAYOUT
     public static void makeUI()
     {
         JFrame window = new JFrame();
-        window.setSize(850, 600);
+        window.setSize(865, 639);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(true);
 
@@ -136,6 +137,7 @@ public class COORDINATELAYOUT
         buyStoreButton.setIcon(new ImageIcon("furnishResources/STORE.png"));
         buyStoreButton.setRolloverIcon(new ImageIcon("furnishResources/STORE_HOVER.png"));
         buyStoreButton.setPressedIcon(new ImageIcon("furnishResources/STORE_BOUGHT_2.png"));
+        buyStoreButton.setDisabledIcon(new ImageIcon("furnishResources/STORE_BOUGHT.png"));
         buyStoreButton.setBounds(314, 36, 144, 48);
         backgroundPanel.add(buyStoreButton);
 
@@ -271,13 +273,7 @@ public class COORDINATELAYOUT
         consoleCover.setBounds(483, 274, 366, 51);
         backgroundPanel.add(consoleCover);
 
-        JLabel backgroundImg = new JLabel();
-        backgroundImg.setIcon(new ImageIcon("furnishResources/WORKSHOP.png"));
         backgroundImg.setBounds(483, 0, 366, 274);
-
-        JLabel backgroundImg2 = new JLabel();
-        backgroundImg2.setIcon(new ImageIcon("furnishResources/STOREBG.png"));
-        backgroundImg2.setBounds(483, 0, 366, 274);
 
         backgroundPanel.add(backgroundImg);
 
@@ -363,6 +359,41 @@ public class COORDINATELAYOUT
          * Material Purchases
          */
 
+        /*
+         * MISC BUTTONS
+         */
+        buyPosterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gamestate.getNumPosters();
+                gamestate.putUpPoster();
+                if (gamestate.getNumPosters() != wereThisMany)
+                {
+                    writeInConsole("[ADVERTISEMENT] PUT UP ONE POSTER");
+
+                }
+                else
+                {
+                    writeInConsole("[ADVERTISEMENT] POSTER HANGING UNSUCCESSFUL");
+                }
+                updateGUI();
+            }
+        });
+        buyStoreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                gamestate.buyStore();
+                if (gamestate.isBoughtStore()) {
+                    buyStoreButton.setEnabled(false);
+                    writeInConsole("[STORE-PURCHASE] BOUGHT STORE SUCCESSFULLY." +
+                            "\n  > CONGRATS PLAYER, YOU WON!");
+                } else {
+                    writeInConsole("[STORE-PURCHASE] FAILED TO BUY STORE");
+                }
+                updateGUI();
+            }
+        });
 
     }
 
@@ -419,6 +450,13 @@ public class COORDINATELAYOUT
                 button.setPressedIcon(new ImageIcon("furnishResources/" + furniture.getFurnitureName().toUpperCase() + "_PRESSED.png"));
             }
         }
+        if (gamestate.isBoughtStore()) {
+            backgroundImg.setIcon(new ImageIcon("furnishResources/STOREBG.png"));
+        } else {
+            backgroundImg.setIcon(new ImageIcon("furnishResources/WORKSHOP.png"));
+        }
+
+
 
 
 
