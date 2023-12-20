@@ -5,6 +5,7 @@ import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,7 +20,6 @@ public class GuiManager {
 
     // textArea
     JTextArea consoleText;
-    JScrollPane consoleScrollPane;
 
     // INFORMATION LABELS
     JLabel companyName;
@@ -32,8 +32,11 @@ public class GuiManager {
     JLabel numScrewInfo;
     JLabel numHardwoodInfo;
 
+    ArrayList<JButton> makeButtons = new ArrayList<>();
+
     // IMAGES
     ImageIcon boughtIcon = new ImageIcon("furnishResources/BOUGHT.png");
+
 
     public GuiManager(Business gameState) {
         this.gameState = gameState;
@@ -47,9 +50,8 @@ public class GuiManager {
         gameWindow.setResizable(true);
         gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         gameWindow.setLocationRelativeTo(null);
-
-//        gameWindow.setIconImage(); // LOGO
         gameWindow.setName("ISC3U - FURNISH_SIM");
+
 
         // BIG PANEL
         JPanel gamePanel = new JPanel();
@@ -152,16 +154,30 @@ public class GuiManager {
         for (Furniture furniture : gameState.getFurnitures()) {
             JButton button = new JButton(furniture.getFurnitureName().charAt(0) + "");
             button.setPreferredSize(new Dimension(48, 48));
+            if (!furniture.hasBlueprint())
+            {
+                button.setEnabled(false);
+            }
             button.addActionListener(new ActionListener() {
+
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    int wereThisMany = furniture.getNumInStock();
                     gameState.makeFurniture(furniture);
                     // TODO if successful
-                    writeInConsole("[MADE] 1 " + furniture.getFurnitureName().toUpperCase());
+                    if (/* furniture.hasBlueprint()  && */ (furniture.getNumInStock() > wereThisMany))
+                    {
+                        writeInConsole("[MADE] 1 " + furniture.getFurnitureName().toUpperCase());
+                    }
+                    else
+                    {
+                        writeInConsole("[MADE] " + furniture.getFurnitureName().toUpperCase() + " BUILD UNSUCCESSFUL");
+                    }
                     updateGUI();
                 }
             });
             makePanel.add(button);
+            makeButtons.add(button);
         }
 
         // RETURN
@@ -214,13 +230,15 @@ public class GuiManager {
         JLabel title = new JLabel("OPTIONS: ");
         buyingOptionPanel.add(title);
 
+
         // TICK BUTTON
         JButton tickButton = new JButton("TICK");
         tickButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameState.tick();
-                consoleText.setText(" > NEW TICK [" + gameState.getTicksActive() + "]");
+                gameState.setTicksActive(gameState.getTicksActive() + 1);
+                consoleText.setText(" # NEW TICK [" + gameState.getTicksActive() + "]");
+                consoleText.append(gameState.tick());
                 updateGUI();
             }
         });
@@ -429,9 +447,11 @@ public class GuiManager {
             public void run() {
                 if (autoTickerActive)
                 {
-                    gameState.tick();
                     // also happens in the plain tick
-                    consoleText.setText("> <AUTO> NEW TICK [" + gameState.getTicksActive() + "]");
+                    gameState.setTicksActive(gameState.getTicksActive() + 1);
+                    consoleText.setText("> (AUTO) NEW TICK [" + gameState.getTicksActive() + "]\n");
+                    consoleText.append(gameState.tick());
+
                     updateGUI();
                 }
             }
@@ -443,7 +463,6 @@ public class GuiManager {
     }
 
     public void updateGUI() {
-        // LABELS
         businessData.setText("---"/*gameState.toString()*/);
         companyName.setText(gameState.getCompanyName());
         moneyInfo.setText("MONEY: " + gameState.getMoney() + "$");
