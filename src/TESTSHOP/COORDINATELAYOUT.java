@@ -13,7 +13,7 @@ public class COORDINATELAYOUT
     public void makeUI()
     {
         JFrame window = new JFrame();
-        window.setSize(865, 639);
+        window.setSize(850, 600);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(true);
 
@@ -227,6 +227,62 @@ public class COORDINATELAYOUT
         JLabel hardboard = new JLabel("XXX");
         hardboard.setBounds(250, 570, 100, 30); // x, y, width, height
         backgroundPanel.add(hardboard);
+
+
+        /*
+         * MISC TEXT
+         */
+
+        JLabel poster = new JLabel("Funny poster dialog");
+        poster.setBounds(122, 414, 100, 30); // x, y, width, height
+        backgroundPanel.add(poster);
+
+        JLabel stools = new JLabel("XXX Owned");
+        stools.setBounds(327, 225, 100, 30); // x, y, width, height
+        backgroundPanel.add(stools);
+
+        JLabel chairs = new JLabel("XXX Owned");
+        chairs.setBounds(327, 303, 100, 30); // x, y, width, height
+        backgroundPanel.add(chairs);
+
+        JLabel tables = new JLabel("XXX Owned");
+        tables.setBounds(327, 386, 100, 30); // x, y, width, height
+        backgroundPanel.add(tables);
+
+        JLabel shelves = new JLabel("XXX Owned");
+        shelves.setBounds(327, 469, 100, 30); // x, y, width, height
+        backgroundPanel.add(shelves);
+
+        JLabel mailboxes = new JLabel("XXX Owned");
+        mailboxes.setBounds(327, 552, 100, 30); // x, y, width, height
+        backgroundPanel.add(mailboxes);
+
+        /*
+         * GUI THAT COVERS THE CONSOLE
+         */
+
+        // background
+        JLabel consoleCover = new JLabel();
+        consoleCover.setIcon(new ImageIcon("furnishResources/CONSOLE_COVER.png"));
+        consoleCover.setBounds(483, 274, 366, 51);
+        backgroundPanel.add(consoleCover);
+
+        JLabel backgroundImg = new JLabel();
+        backgroundImg.setIcon(new ImageIcon("furnishResources/WORKSHOP.png"));
+        backgroundImg.setBounds(483, 0, 366, 274);
+
+        JLabel backgroundImg2 = new JLabel();
+        backgroundImg2.setIcon(new ImageIcon("furnishResources/STOREBG.png"));
+        backgroundImg2.setBounds(483, 0, 366, 274);
+
+        backgroundPanel.add(backgroundImg);
+
+
+
+        /*
+         * IMPORTANT: DRAW THE CONSOLE AFTER THIS
+         */
+
 
         // Add the background panel to the JFrame
         window.add(backgroundPanel);
