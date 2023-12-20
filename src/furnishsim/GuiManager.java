@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 public class GuiManager
 {
@@ -194,6 +195,7 @@ public class GuiManager
 
         // TICK BUTTON
         JButton tickButton = new JButton("TICK");
+        tickButton.setMnemonic(KeyEvent.VK_T); // [ALT + T]
         tickButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
