@@ -85,7 +85,9 @@ public class Furniture
         return numInStock;
     }
 
+
     public void setNumInStock(int numInStock) {
         this.numInStock = numInStock;
     }
+
 }
