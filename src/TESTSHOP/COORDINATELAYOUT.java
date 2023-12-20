@@ -277,7 +277,13 @@ public class COORDINATELAYOUT
 
         backgroundPanel.add(backgroundImg);
 
+        JButton tickButton = new JButton("TICK");
+        tickButton.setBounds(490, 289, 75, 20);
+        backgroundPanel.add(tickButton);
 
+        JButton autoTickerToggle = new JButton("AUTO");
+        autoTickerToggle.setBounds(767, 289, 75, 20);
+        backgroundPanel.add(autoTickerToggle);
 
         /*
          * IMPORTANT: DRAW THE CONSOLE AFTER THIS
