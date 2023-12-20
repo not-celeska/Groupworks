@@ -130,7 +130,7 @@ public class COORDINATELAYOUT
         buyPosterButton.setIcon(new ImageIcon("furnishResources/POSTER.png"));
         buyPosterButton.setRolloverIcon(new ImageIcon("furnishResources/POSTER_HOVER.png"));
         buyPosterButton.setPressedIcon(new ImageIcon("furnishResources/POSTER_PRESSED.png"));
-        buyPosterButton.setBounds(36, 414, 64, 80);
+        buyPosterButton.setBounds(35, 414, 64, 80);
         backgroundPanel.add(buyPosterButton);
 
         // Store
