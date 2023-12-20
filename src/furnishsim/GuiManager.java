@@ -1,6 +1,7 @@
 package furnishsim;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -90,8 +91,8 @@ public class GuiManager {
 
         // Display the game window
         gameWindow.setVisible(true);
-        writeInConsole(" > Simulation is open!\n" +
-                           "       -   Welcome! Have fun!");
+        writeInConsole(" > Simulation is ONLINE!\n" +
+                           "       -   This is where you will see things that happen! Have fun!");
         updateGUI();
     }
 
@@ -219,7 +220,7 @@ public class GuiManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gameState.tick();
-                writeInConsole("\n > NEW TICK [" + gameState.getTicksActive() + "]");
+                consoleText.setText(" > NEW TICK [" + gameState.getTicksActive() + "]");
                 updateGUI();
             }
         });
@@ -231,13 +232,22 @@ public class GuiManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 autoTickerActive = !(autoTickerActive);
-                String onOff = "| DISABLED |";
+
+                String onOff;
+
                 if (autoTickerActive)
                 {
                     onOff = "| ENABLED |";
+                    autoTickerButton.setBackground(Color.green);
+                }
+                else
+                {
+                    onOff = "| DISABLED |";
+                    autoTickerButton.setBackground(Color.red);
+
                 }
 
-                writeInConsole("[AUTOTICKER] " + onOff);
+                writeInConsole("\n[AUTOTICKER] " + onOff);
 
                 // TODO on and off icon
 
@@ -246,7 +256,7 @@ public class GuiManager {
         });
 
 
-        // TODO add 1 or 10 per button through
+        // TODO add 1 or 10 per button through <-- just make bulk
         // BUY WOOD BUTTON
         JButton buyWoodButton = new JButton();
         buyWoodButton.setPreferredSize(new Dimension(48, 48));
@@ -256,9 +266,18 @@ public class GuiManager {
         buyWoodButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gameState.getResources()[gameState.WOOD];
                 gameState.buyResource(1, gameState.WOOD);
-                // TODO check if went through
-                writeInConsole("[PURCHASE] BOUGHT 1 WOOD");
+                if (gameState.getResources()[gameState.WOOD] != wereThisMany)
+                {
+                    writeInConsole("[PURCHASE] BOUGHT 1 WOOD");
+
+                }
+                else
+                {
+                    writeInConsole("[PURCHASE] WOOD PURCHASE FAILED");
+                }
+
                 updateGUI();
             }
         });
@@ -273,8 +292,17 @@ public class GuiManager {
         buyNailButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gameState.getResources()[gameState.NAILS];
                 gameState.buyResource(1, gameState.NAILS);
-                writeInConsole("[PURCHASE] BOUGHT 1 NAIL");
+                if (gameState.getResources()[gameState.NAILS] != wereThisMany)
+                {
+                    writeInConsole("[PURCHASE] BOUGHT 1 NAIL");
+
+                }
+                else
+                {
+                    writeInConsole("[PURCHASE] NAIL PURCHASE FAILED");
+                }
                 updateGUI();
             }
         });
@@ -288,8 +316,18 @@ public class GuiManager {
         buyScrewsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gameState.getResources()[gameState.SCREWS];
                 gameState.buyResource(1, gameState.SCREWS);
-                writeInConsole("[PURCHASE] BOUGHT 1 SCREW");
+                if (gameState.getResources()[gameState.SCREWS] != wereThisMany)
+                {
+                    writeInConsole("[PURCHASE] BOUGHT 1 SCREW"); // TODO should be in bulk
+
+                }
+                else
+                {
+                    writeInConsole("[PURCHASE] SCREW PURCHASE FAILED");
+                }
+
                 updateGUI();
             }
         });
@@ -303,8 +341,17 @@ public class GuiManager {
         buyHardwoodButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gameState.getResources()[gameState.HARDBOARD];
                 gameState.buyResource(1, gameState.HARDBOARD);
-                writeInConsole("[PURCHASE] BOUGHT 1 HARDBOARD");
+                if (gameState.getResources()[gameState.HARDBOARD] != wereThisMany)
+                {
+                    writeInConsole("[PURCHASE] BOUGHT 1 HARDBOARD");
+
+                }
+                else
+                {
+                    writeInConsole("[PURCHASE] HARDWOOD PURCHASE FAILED");
+                }
                 updateGUI();
             }
         });
@@ -343,9 +390,17 @@ public class GuiManager {
         buyPosterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gameState.getNumPosters();
                 gameState.putUpPoster();
-                // TODO check here
-                writeInConsole("[ADVERTISEMENT] PUT UP ONE POSTER");
+                if (gameState.getNumPosters() != wereThisMany)
+                {
+                    writeInConsole("[ADVERTISEMENT] PUT UP ONE POSTER");
+
+                }
+                else
+                {
+                    writeInConsole("[ADVERTISEMENT] POSTER HANGING UNSUCCESSFUL");
+                }
                 updateGUI();
             }
         });
@@ -375,7 +430,7 @@ public class GuiManager {
                 if (autoTickerActive)
                 {
                     gameState.tick();
-                    writeInConsole("\n > <AUTO> NEW TICK [" + gameState.getTicksActive() + "]");
+                    consoleText.setText("> <AUTO> NEW TICK [" + gameState.getTicksActive() + "]");
                     updateGUI();
                 }
             }

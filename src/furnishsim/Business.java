@@ -18,10 +18,7 @@ public class Business
     private double money;
     private int profit; // TODO: -40 AT THE START.
     private int[] resources;
-    final private double WOOD_PRICE = 8.0;
-    final private double NAIL_PRICE = 0.15;
-    final private double SCREW_PRICE = 0.05;
-    final private double HARDBOARD_PRICE = 32;
+    final private double[] resourcePrice = {8.0, 0.15, 0.05, 32};
     final public int WOOD = 0;
     final public int NAILS = 1;
     final public int SCREWS = 2;
@@ -222,31 +219,37 @@ public class Business
     }
 
     // ========================
-    public void buyResource(int quantity, int type)
+    public void buyResource(int quantity, int resourceIndex)
     {
-        switch(type) {
-            case 0:
-                if (money >= (WOOD_PRICE * quantity)) {
-                money -= (WOOD_PRICE * quantity);
-                resources[WOOD] += quantity;
-                }
-            case 1:
-                if (money >= (NAIL_PRICE * quantity)) {
-                    money -= (NAIL_PRICE * quantity);
-                    resources[NAILS] += quantity;
-                }
-            case 2:
-                if (money >= (SCREW_PRICE * quantity)) {
-                    money -= (SCREW_PRICE * quantity);
-                    resources[SCREWS] += quantity;
-                }
-            case 3:
-                if (money >= (HARDBOARD_PRICE * quantity)) {
-                    money -= (HARDBOARD_PRICE * quantity);
-                    resources[HARDBOARD] += quantity;
-                }
-        }
+            if (money >= (resourcePrice[resourceIndex] * quantity))
+            {
+                money -= (resourcePrice[resourceIndex] * quantity);
+                resources[resourceIndex] += quantity;
+            }
     }
+
+//        switch(type) {
+//            case 0:
+//                if (money >= (WOOD_PRICE * quantity)) {
+//                money -= (WOOD_PRICE * quantity);
+//                resources[WOOD] += quantity;
+//                }
+//            case 1:
+//                if (money >= (NAIL_PRICE * quantity)) {
+//                    money -= (NAIL_PRICE * quantity);
+//                    resources[NAILS] += quantity;
+//                }
+//            case 2:
+//                if (money >= (SCREW_PRICE * quantity)) {
+//                    money -= (SCREW_PRICE * quantity);
+//                    resources[SCREWS] += quantity;
+//                }
+//            case 3:
+//                if (money >= (HARDBOARD_PRICE * quantity)) {
+//                    money -= (HARDBOARD_PRICE * quantity);
+//                    resources[HARDBOARD] += quantity;
+//                }
+//        }
 
     public void buyStore() {
         if (money >= 8500) {
