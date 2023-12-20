@@ -5,9 +5,6 @@ import java.awt.*;
 
 public class COORDINATELAYOUT
 {
-
-    static Font textFont = new Font("Serif", Font.BOLD, 14);
-
     public static void main(String[] args)
     {
         new COORDINATELAYOUT().makeUI();
@@ -36,10 +33,9 @@ public class COORDINATELAYOUT
         backgroundPanel.setLayout(null);
 
         // Create and position other components on top of the background panel
-        JButton stoolIcon = new JButton();
-//        stoolIcon.setIcon();
-        stoolIcon.setBounds(35, 97, 48, 48); // x, y, width, height
-        backgroundPanel.add(stoolIcon);
+        JButton button = new JButton("S");
+        button.setBounds(35, 97, 48, 48); // x, y, width, height
+        backgroundPanel.add(button);
 
         JButton chairButton = new JButton("C");
         chairButton.setBounds(35, 180, 48, 48); // x, y, width, height
@@ -50,7 +46,6 @@ public class COORDINATELAYOUT
         backgroundPanel.add(tableBut);
 
         JLabel money = new JLabel("150$");
-        money.setFont(textFont);
         money.setBounds(54, 523, 100, 30); // x, y, width, height
         backgroundPanel.add(money);
 

@@ -229,7 +229,7 @@ public class GuiManager
         buyNailButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameState.buyResource(1, gameState.NAIL);
+                gameState.buyResource(1, gameState.NAILS);
                 System.out.println("bought 1 nail!");
                 updateGUI();
             }
@@ -244,7 +244,7 @@ public class GuiManager
         buyScrewsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameState.buyResource(1, gameState.SCREW);
+                gameState.buyResource(1, gameState.SCREWS);
                 System.out.println("bought 1 screw!");
                 updateGUI();
             }
@@ -259,7 +259,7 @@ public class GuiManager
         buyHardwoodButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameState.buyResource(1, gameState.HARDWOOD);
+                gameState.buyResource(1, gameState.HARDBOARD);
                 System.out.println("bought 1 hardwood!");
                 updateGUI();
             }
@@ -331,9 +331,9 @@ public class GuiManager
         blueprintsUnlockedInfo.setText("BLUEPRINTS UNLOCKED: " + gameState.getBlueprintsUnlocked());
         numPostersInfo.setText("# OF POSTERS: " + gameState.getNumPosters());
         numWoodInfo.setText("WOOD: " + gameState.getResources()[gameState.WOOD]);
-        numNailInfo.setText("NAIL: " + gameState.getResources()[gameState.NAIL]);
-        numScrewInfo.setText("SCREW: " + gameState.getResources()[gameState.SCREW]);
-        numHardwoodInfo.setText("HARDWOOD: " + gameState.getResources()[gameState.HARDWOOD]);
+        numNailInfo.setText("NAIL: " + gameState.getResources()[gameState.NAILS]);
+        numScrewInfo.setText("SCREW: " + gameState.getResources()[gameState.SCREWS]);
+        numHardwoodInfo.setText("HARDWOOD: " + gameState.getResources()[gameState.HARDBOARD]);
 
 /*
         images (stage)
