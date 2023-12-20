@@ -4,12 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class GuiManager
-{
+public class GuiManager {
     Business gameState;
     JFrame gameWindow;
     JLabel businessData;
+
+    // autoTicker
+    Timer autoTickerTimer;
+    boolean autoTickerActive = false;
 
     // INFORMATION LABELS
     JLabel companyName;
@@ -25,8 +30,7 @@ public class GuiManager
     // IMAGES
     ImageIcon boughtIcon = new ImageIcon("furnishResources/BOUGHT.png");
 
-    public GuiManager(Business gameState)
-    {
+    public GuiManager(Business gameState) {
         this.gameState = gameState;
     }
 
@@ -51,7 +55,7 @@ public class GuiManager
 
         // SMALLER PANELS
         JPanel buyAndAdvertise = new JPanel(); // buy & advertise
-        JPanel buyingPanel = createBuyingPanel();
+        JPanel buyingPanel = createBuyingOptionsPanel();
         JPanel makePanel = createMakePanel();
         JPanel blueprintPanel = createBlueprintPanel();
         JPanel infoPanel = createInfoPanel();
@@ -63,13 +67,15 @@ public class GuiManager
         gamePanel.add(blueprintPanel);
         gamePanel.add(infoPanel);
 
+        // creates the auto ticker
+        createAutoTicker();
+
         // Display the game window
         gameWindow.setVisible(true);
         updateGUI();
     }
 
-    private JPanel createInfoPanel()
-    {
+    private JPanel createInfoPanel() {
         JPanel infoPanel = new JPanel(); // information
         infoPanel.setBackground(Color.lightGray);
 
@@ -114,8 +120,7 @@ public class GuiManager
         return infoPanel;
     }
 
-    private JPanel createMakePanel()
-    {
+    private JPanel createMakePanel() {
         JPanel makePanel = new JPanel();
 
         // HEADER / TEXT
@@ -141,8 +146,7 @@ public class GuiManager
         return makePanel;
     }
 
-    private JPanel createBlueprintPanel()
-    {
+    private JPanel createBlueprintPanel() {
         JPanel blueprintPanel = new JPanel();
 
         // HEADER / TEXT
@@ -163,13 +167,10 @@ public class GuiManager
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         gameState.buyBlueprint(furniture);
-                        if (furniture.hasBlueprint())
-                        {
+                        if (furniture.hasBlueprint()) {
                             System.out.println("bought blueprint for " + furniture.getFurnitureName().toLowerCase());
                             buyBlueprintButton.setEnabled(false);
-                        }
-                        else
-                        {
+                        } else {
                             System.out.println("failed to purchase BLUEPRINT for: " + furniture.getFurnitureName().toUpperCase());
                         }
                         updateGUI();
@@ -184,13 +185,12 @@ public class GuiManager
 
     }
 
-    private JPanel createBuyingPanel()
-    {
-        JPanel buyingPanel = new JPanel();
+    private JPanel createBuyingOptionsPanel() {
+        JPanel buyingOptionPanel = new JPanel();
 
         // label
         JLabel title = new JLabel("OPTIONS: ");
-        buyingPanel.add(title);
+        buyingOptionPanel.add(title);
 
         // TICK BUTTON
         JButton tickButton = new JButton("TICK");
@@ -202,6 +202,21 @@ public class GuiManager
                 updateGUI();
             }
         });
+
+        // AUTO TICKER
+
+        JButton autoTickerButton = new JButton("AUTO TICKER");
+        autoTickerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                autoTickerActive = !(autoTickerActive);
+                System.out.println("autoTicker is now: " + autoTickerActive);
+                // on and off icon
+
+                updateGUI();
+            }
+        });
+
 
         // TODO add 1 or 10 per button through
         // BUY WOOD BUTTON
@@ -278,12 +293,9 @@ public class GuiManager
             public void actionPerformed(ActionEvent e) {
 
                 gameState.buyStore();
-                if (gameState.isBoughtStore())
-                {
+                if (gameState.isBoughtStore()) {
                     System.out.println("BOUGHT STORE! CONGRATS!");
-                }
-                else
-                {
+                } else {
                     System.out.println("FAILED TO BUY STORE.");
                 }
                 updateGUI();
@@ -306,27 +318,44 @@ public class GuiManager
                 updateGUI();
             }
         });
-        buyingPanel.add(buyPosterButton);
-
+        buyingOptionPanel.add(buyPosterButton);
 
 
         // ADDING TO SCREEN & WINDOW
-        buyingPanel.add(tickButton);
-        buyingPanel.add(buyNailButton);
-        buyingPanel.add(buyScrewsButton);
-        buyingPanel.add(buyWoodButton);
-        buyingPanel.add(buyHardwoodButton);
-        buyingPanel.add(buyStoreButton);
+        buyingOptionPanel.add(autoTickerButton);
+        buyingOptionPanel.add(tickButton);
+        buyingOptionPanel.add(buyNailButton);
+        buyingOptionPanel.add(buyScrewsButton);
+        buyingOptionPanel.add(buyWoodButton);
+        buyingOptionPanel.add(buyHardwoodButton);
+        buyingOptionPanel.add(buyStoreButton);
 
-        return buyingPanel;
+        return buyingOptionPanel;
     }
 
-    public void updateGUI()
+    public void createAutoTicker()
     {
+        autoTickerTimer = new Timer();
+
+        autoTickerTimer.scheduleAtFixedRate(new TimerTask()
+        {
+            @Override
+            public void run() {
+                if (autoTickerActive)
+                {
+                    gameState.tick();
+                    updateGUI();
+                }
+            }
+        }, 2000, 2000);
+    }
+
+
+    public void updateGUI() {
         // LABELS
         businessData.setText("---"/*gameState.toString()*/);
         companyName.setText(gameState.getCompanyName());
-    moneyInfo.setText("MONEY: " + gameState.getMoney() + "$");
+        moneyInfo.setText("MONEY: " + gameState.getMoney() + "$");
         popularityInfo.setText("POPULARITY: " + Math.round(gameState.getCustomerAttraction() * 100) + "%");
         blueprintsUnlockedInfo.setText("BLUEPRINTS UNLOCKED: " + gameState.getBlueprintsUnlocked());
         numPostersInfo.setText("# OF POSTERS: " + gameState.getNumPosters());
@@ -339,7 +368,6 @@ public class GuiManager
         images (stage)
         log
          */
-
 
 
         // this should update the guis for when something is bought, reset the text, etc.
