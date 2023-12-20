@@ -238,7 +238,7 @@ public class COORDINATELAYOUT
         mailboxes.setBounds(327, 557, 100, 30); // x, y, width, height
         backgroundPanel.add(mailboxes);
 
-        money.setBounds(54, 525, 75, 30); // x, y, width, height
+        money.setBounds(54, 525, 100, 30); // x, y, width, height
         backgroundPanel.add(money);
 
         popularity.setBounds(90, 540, 100, 30); // x, y, width, height

@@ -1,6 +1,7 @@
 package furnishsim;
 
 import java.util.Random;
+import java.lang.Math;
 
 /**
  * AKA GAME STATE
@@ -238,6 +239,7 @@ public class Business
         {
             money -= (resourcePrice[resourceIndex] * quantity);
             resources[resourceIndex] += quantity;
+            roundToTwo(money);
         }
     }
 
@@ -296,6 +298,7 @@ public class Business
         {
             money -= POSTER_PRICE;
             customerAttraction += Math.round(1000.0 * (5.0 / ((Math.pow(numberOfPosters, 2.0)) + 25.0))) / 1000.0;
+            roundToTwo(customerAttraction);
             numberOfPosters++;
         }
     }
@@ -403,6 +406,9 @@ public class Business
         for (int i = 0; i < list1.length; i++) {
             list1[i] -= list2[i];
         }
+    }
+    public void roundToTwo(double num) {
+        num = (Math.round(num*100))/100;
     }
 }
 
