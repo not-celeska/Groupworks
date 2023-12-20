@@ -60,7 +60,7 @@ public class COORDINATELAYOUT
     static JButton timesTenButton = new JButton();
     static JButton buyWoodButton = new JButton();
     static JButton buyNailsButton = new JButton();
-    static JButton buyHardBoardButton = new JButton();
+    static JButton buyHardboardButton = new JButton();
     static JButton buyScrewsButton = new JButton();
 
 
@@ -175,11 +175,11 @@ public class COORDINATELAYOUT
         backgroundPanel.add(buyNailsButton);
 
         // hardboard
-        buyHardBoardButton.setIcon(new ImageIcon("furnishResources/HARDWOOD.png")); // cannot be bothered to change the filename
-        buyHardBoardButton.setRolloverIcon(new ImageIcon("furnishResources/HARDWOOD_HOVER.png"));
-        buyHardBoardButton.setPressedIcon(new ImageIcon("furnishResources/HARDWOOD_PRESSED.png"));
-        buyHardBoardButton.setBounds(122, 180, 48, 48);
-        backgroundPanel.add(buyHardBoardButton);
+        buyHardboardButton.setIcon(new ImageIcon("furnishResources/HARDWOOD.png")); // cannot be bothered to change the filename
+        buyHardboardButton.setRolloverIcon(new ImageIcon("furnishResources/HARDWOOD_HOVER.png"));
+        buyHardboardButton.setPressedIcon(new ImageIcon("furnishResources/HARDWOOD_PRESSED.png"));
+        buyHardboardButton.setBounds(122, 180, 48, 48);
+        backgroundPanel.add(buyHardboardButton);
 
         // screws
         buyScrewsButton.setIcon(new ImageIcon("furnishResources/SCREWS.png")); // cannot be bothered to change the filename
@@ -238,7 +238,7 @@ public class COORDINATELAYOUT
         mailboxes.setBounds(327, 557, 100, 30); // x, y, width, height
         backgroundPanel.add(mailboxes);
 
-        money.setBounds(54, 525, 100, 30); // x, y, width, height
+        money.setBounds(54, 525, 75, 30); // x, y, width, height
         backgroundPanel.add(money);
 
         popularity.setBounds(90, 540, 100, 30); // x, y, width, height
@@ -247,7 +247,7 @@ public class COORDINATELAYOUT
         blueprints.setBounds(145, 555, 100, 30); // x, y, width, height
         backgroundPanel.add(blueprints);
 
-        posters.setBounds(106, 570, 100, 30); // x, y, width, height
+        posters.setBounds(106, 570, 30, 30); // x, y, width, height
         backgroundPanel.add(posters);
 
         wood.setBounds(210, 525, 100, 30); // x, y, width, height
@@ -394,7 +394,76 @@ public class COORDINATELAYOUT
                 updateGUI();
             }
         });
+        buyWoodButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gamestate.getResources()[gamestate.WOOD];
+                gamestate.buyResource(1, gamestate.WOOD);
+                if (gamestate.getResources()[gamestate.WOOD] != wereThisMany)
+                {
+                    writeInConsole("[PURCHASE] BOUGHT 1 WOOD");
 
+                }
+                else
+                {
+                    writeInConsole("[PURCHASE] WOOD PURCHASE FAILED");
+                }
+
+                updateGUI();
+            }
+        });
+        buyNailsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gamestate.getResources()[gamestate.NAILS];
+                gamestate.buyResource(1, gamestate.NAILS);
+                if (gamestate.getResources()[gamestate.NAILS] != wereThisMany)
+                {
+                    writeInConsole("[PURCHASE] BOUGHT 1 NAIL");
+
+                }
+                else
+                {
+                    writeInConsole("[PURCHASE] NAIL PURCHASE FAILED");
+                }
+                updateGUI();
+            }
+        });
+        buyScrewsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gamestate.getResources()[gamestate.SCREWS];
+                gamestate.buyResource(1, gamestate.SCREWS);
+                if (gamestate.getResources()[gamestate.SCREWS] != wereThisMany)
+                {
+                    writeInConsole("[PURCHASE] BOUGHT 1 SCREW"); // TODO should be in bulk
+
+                }
+                else
+                {
+                    writeInConsole("[PURCHASE] SCREW PURCHASE FAILED");
+                }
+
+                updateGUI();
+            }
+        });
+        buyHardboardButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gamestate.getResources()[gamestate.HARDBOARD];
+                gamestate.buyResource(1, gamestate.HARDBOARD);
+                if (gamestate.getResources()[gamestate.HARDBOARD] != wereThisMany)
+                {
+                    writeInConsole("[PURCHASE] BOUGHT 1 HARDBOARD");
+
+                }
+                else
+                {
+                    writeInConsole("[PURCHASE] HARDWOOD PURCHASE FAILED");
+                }
+                updateGUI();
+            }
+        });
     }
 
     public static void updateGUI() {
