@@ -53,6 +53,16 @@ public class COORDINATELAYOUT
 
     static JButton[] workshopButtons = new JButton[] {new JButton(), new JButton(), new JButton(), new JButton(), new JButton()};
 
+    static JButton buyPosterButton = new JButton();
+    static JButton buyStoreButton = new JButton();
+    static JButton timesOneButton = new JButton();
+    static JButton timesTenButton = new JButton();
+    static JButton buyWoodButton = new JButton();
+    static JButton buyNailsButton = new JButton();
+    static JButton buyHardBoardButton = new JButton();
+    static JButton buyScrewsButton = new JButton();
+
+
 
 
     public static void main(String[] args)
@@ -116,7 +126,6 @@ public class COORDINATELAYOUT
          */
 
         // Poster
-        JButton buyPosterButton = new JButton();
         buyPosterButton.setIcon(new ImageIcon("furnishResources/POSTER.png"));
         buyPosterButton.setRolloverIcon(new ImageIcon("furnishResources/POSTER_HOVER.png"));
         buyPosterButton.setPressedIcon(new ImageIcon("furnishResources/POSTER_PRESSED.png"));
@@ -124,7 +133,6 @@ public class COORDINATELAYOUT
         backgroundPanel.add(buyPosterButton);
 
         // Store
-        JButton buyStoreButton = new JButton();
         buyStoreButton.setIcon(new ImageIcon("furnishResources/STORE.png"));
         buyStoreButton.setRolloverIcon(new ImageIcon("furnishResources/STORE_HOVER.png"));
         buyStoreButton.setPressedIcon(new ImageIcon("furnishResources/STORE_BOUGHT_2.png"));
@@ -132,7 +140,6 @@ public class COORDINATELAYOUT
         backgroundPanel.add(buyStoreButton);
 
         // *1 button
-        JButton timesOneButton = new JButton();
         timesOneButton.setIcon(new ImageIcon("furnishResources/1.png"));
         timesOneButton.setRolloverIcon(new ImageIcon("furnishResources/1_HOVER.png"));
         timesOneButton.setPressedIcon(new ImageIcon("furnishResources/1_CLICK.png"));
@@ -140,7 +147,6 @@ public class COORDINATELAYOUT
         backgroundPanel.add(timesOneButton);
 
         // *10 button
-        JButton timesTenButton = new JButton();
         timesTenButton.setIcon(new ImageIcon("furnishResources/10.png"));
         timesTenButton.setRolloverIcon(new ImageIcon("furnishResources/10_HOVER.png"));
         timesTenButton.setPressedIcon(new ImageIcon("furnishResources/10_CLICK.png"));
@@ -153,7 +159,6 @@ public class COORDINATELAYOUT
          */
 
         // wood
-        JButton buyWoodButton = new JButton();
         buyWoodButton.setIcon(new ImageIcon("furnishResources/WOOD.png"));
         buyWoodButton.setRolloverIcon(new ImageIcon("furnishResources/WOOD_HOVER.png"));
         buyWoodButton.setPressedIcon(new ImageIcon("furnishResources/WOOD_PRESSED.png"));
@@ -161,7 +166,6 @@ public class COORDINATELAYOUT
         backgroundPanel.add(buyWoodButton);
 
         // nails
-        JButton buyNailsButton = new JButton();
         buyNailsButton.setIcon(new ImageIcon("furnishResources/NAIL.png"));
         buyNailsButton.setRolloverIcon(new ImageIcon("furnishResources/NAIL_HOVER.png"));
         buyNailsButton.setPressedIcon(new ImageIcon("furnishResources/NAIL_PRESSED.png"));
@@ -169,7 +173,6 @@ public class COORDINATELAYOUT
         backgroundPanel.add(buyNailsButton);
 
         // hardboard
-        JButton buyHardBoardButton = new JButton();
         buyHardBoardButton.setIcon(new ImageIcon("furnishResources/HARDWOOD.png")); // cannot be bothered to change the filename
         buyHardBoardButton.setRolloverIcon(new ImageIcon("furnishResources/HARDWOOD_HOVER.png"));
         buyHardBoardButton.setPressedIcon(new ImageIcon("furnishResources/HARDWOOD_PRESSED.png"));
@@ -177,7 +180,6 @@ public class COORDINATELAYOUT
         backgroundPanel.add(buyHardBoardButton);
 
         // screws
-        JButton buyScrewsButton = new JButton();
         buyScrewsButton.setIcon(new ImageIcon("furnishResources/SCREWS.png")); // cannot be bothered to change the filename
         buyScrewsButton.setRolloverIcon(new ImageIcon("furnishResources/SCREWS_HOVER.png"));
         buyScrewsButton.setPressedIcon(new ImageIcon("furnishResources/SCREWS_PRESSED.png"));
@@ -352,6 +354,16 @@ public class COORDINATELAYOUT
                 }
             });
         }
+
+
+
+
+
+        /*
+         * Material Purchases
+         */
+
+
     }
 
     public static void updateGUI() {
