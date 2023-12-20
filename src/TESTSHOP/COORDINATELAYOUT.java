@@ -13,7 +13,7 @@ public class COORDINATELAYOUT
     public void makeUI()
     {
         JFrame window = new JFrame();
-        window.setSize(865, 639);
+        window.setSize(850, 600);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(true);
 
@@ -83,6 +83,29 @@ public class COORDINATELAYOUT
         backgroundPanel.add(buyMailboxButton);
 
 
+
+        /*
+         * MISC
+         */
+
+        // Poster
+        JButton buyPosterButton = new JButton();
+        buyPosterButton.setPreferredSize(new Dimension(48, 48));
+        buyPosterButton.setIcon(new ImageIcon("furnishResources/POSTER.png"));
+        buyPosterButton.setRolloverIcon(new ImageIcon("furnishResources/POSTER_HOVER.png"));
+        buyPosterButton.setPressedIcon(new ImageIcon("furnishResources/POSTER_PRESSED.png"));
+        buyPosterButton.setBounds(35, 414, 64, 80);
+        backgroundPanel.add(buyPosterButton);
+
+        // Store
+        JButton buyStoreButton = new JButton();
+        buyStoreButton.setPreferredSize(new Dimension(48, 48));
+        buyStoreButton.setIcon(new ImageIcon("furnishResources/STORE.png"));
+        buyStoreButton.setRolloverIcon(new ImageIcon("furnishResources/STORE_HOVER.png"));
+        buyStoreButton.setPressedIcon(new ImageIcon("furnishResources/STORE_BOUGHT_2.png"));
+        buyStoreButton.setBounds(314, 36, 144, 48);
+        backgroundPanel.add(buyStoreButton);
+
         /*
          * MATERIALS
          */
@@ -122,6 +145,56 @@ public class COORDINATELAYOUT
         buyScrewsButton.setPressedIcon(new ImageIcon("furnishResources/SCREWS_PRESSED.png"));
         buyScrewsButton.setBounds(205, 180, 48, 48);
         backgroundPanel.add(buyScrewsButton);
+
+        /*
+         * FURNITURE BUYING
+         */
+
+        // Stool
+        JButton buyStoolButton2 = new JButton();
+        buyStoolButton2.setPreferredSize(new Dimension(48, 48));
+        buyStoolButton2.setIcon(new ImageIcon("furnishResources/STOOL.png"));
+        buyStoolButton2.setRolloverIcon(new ImageIcon("furnishResources/STOOL_HOVER.png"));
+        buyStoolButton2.setPressedIcon(new ImageIcon("furnishResources/STOOL_PRESSED.png"));
+        buyStoolButton2.setBounds(327, 185, 48, 48);
+        backgroundPanel.add(buyStoolButton2);
+
+        // Chair
+        JButton buyChairButton2 = new JButton();
+        buyChairButton2.setPreferredSize(new Dimension(48, 48));
+        buyChairButton2.setIcon(new ImageIcon("furnishResources/CHAIR.png"));
+        buyChairButton2.setRolloverIcon(new ImageIcon("furnishResources/CHAIR_HOVER.png"));
+        buyChairButton2.setPressedIcon(new ImageIcon("furnishResources/CHAIR_PRESSED.png"));
+        buyChairButton2.setBounds(327, 268, 48, 48);
+        backgroundPanel.add(buyChairButton2);
+
+        // Table
+        JButton buyTableButton2 = new JButton();
+        buyTableButton2.setPreferredSize(new Dimension(48, 48));
+        buyTableButton2.setIcon(new ImageIcon("furnishResources/TABLE.png"));
+        buyTableButton2.setRolloverIcon(new ImageIcon("furnishResources/TABLE_HOVER.png"));
+        buyTableButton2.setPressedIcon(new ImageIcon("furnishResources/TABLE_PRESSED.png"));
+        buyTableButton2.setBounds(327, 351, 48, 48);
+        backgroundPanel.add(buyTableButton2);
+
+        // Wall Shelf
+        JButton buyShelfButton2 = new JButton();
+        buyShelfButton2.setPreferredSize(new Dimension(48, 48));
+        buyShelfButton2.setIcon(new ImageIcon("furnishResources/SHELF.png"));
+        buyShelfButton2.setRolloverIcon(new ImageIcon("furnishResources/SHELF_HOVER.png"));
+        buyShelfButton2.setPressedIcon(new ImageIcon("furnishResources/SHELF_PRESSED.png"));
+        buyShelfButton2.setBounds(327, 434, 48, 48);
+        backgroundPanel.add(buyShelfButton2);
+
+        // Mailbox
+        JButton buyMailboxButton2 = new JButton();
+        buyMailboxButton2.setPreferredSize(new Dimension(48, 48));
+        buyMailboxButton2.setIcon(new ImageIcon("furnishResources/MAILBOX.png"));
+        buyMailboxButton2.setRolloverIcon(new ImageIcon("furnishResources/MAILBOX_HOVER.png"));
+        buyMailboxButton2.setPressedIcon(new ImageIcon("furnishResources/MAILBOX_PRESSED.png"));
+        buyMailboxButton2.setBounds(327, 517, 48, 48);
+        backgroundPanel.add(buyMailboxButton2);
+
 
         JLabel money = new JLabel("150$");
         money.setBounds(54, 523, 100, 30); // x, y, width, height
