@@ -1,5 +1,3 @@
-package furnishsim;
-
 /*
 EXAMPLE BUTTON:
 
@@ -68,13 +66,8 @@ public class GuiManager
     AUTO TICKER
      */
     static Timer autoTickerTimer;
-    static boolean autoTickerActive;
+    static boolean autoTickerActive = false;
 
-
-    public static void main(String[] args)
-    {
-        new GuiManager().makeUI();
-    }
 
     public static void makeUI()
     {
@@ -90,7 +83,7 @@ public class GuiManager
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Load the background image
-                ImageIcon backgroundImage = new ImageIcon("Resources/GUI.png");
+                ImageIcon backgroundImage = new ImageIcon("furnishResources/GUI.png");
                 Image img = backgroundImage.getImage();
                 g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
             }
@@ -224,50 +217,65 @@ public class GuiManager
          * DRAW TEXT TO SCREEN
          */
 
-        posterText.setBounds(122, 414, 100, 50); // x, y, width, height
+        Font defaultFont = new Font("Monospaced", Font.BOLD, 14);
+
+        posterText.setBounds(122, 435, 120, 50); // x, y, width, height
         posterText.setEditable(false);
-        posterText.setFont(new Font("Monospaced", Font.BOLD, 14));
+        posterText.setFont(new Font("Monospaced", Font.BOLD, 15));
         posterText.setForeground(Color.black);
         backgroundPanel.add(posterText);
 
 
         stools.setBounds(327, 230, 100, 30); // x, y, width, height
+        stools.setFont(defaultFont);
         backgroundPanel.add(stools);
 
         chairs.setBounds(327, 308, 100, 30); // x, y, width, height
+        chairs.setFont(defaultFont);
         backgroundPanel.add(chairs);
 
         tables.setBounds(327, 405, 100, 30); // x, y, width, height
+        tables.setFont(defaultFont);
         backgroundPanel.add(tables);
 
         shelves.setBounds(327, 474, 100, 30); // x, y, width, height
+        shelves.setFont(defaultFont);
         backgroundPanel.add(shelves);
 
         mailboxes.setBounds(327, 557, 100, 30); // x, y, width, height
+        mailboxes.setFont(defaultFont);
         backgroundPanel.add(mailboxes);
 
         money.setBounds(54, 525, 100, 30); // x, y, width, height
+        money.setFont(defaultFont);
         backgroundPanel.add(money);
 
         popularity.setBounds(90, 540, 100, 30); // x, y, width, height
+        popularity.setFont(defaultFont);
         backgroundPanel.add(popularity);
 
         blueprints.setBounds(145, 555, 100, 30); // x, y, width, height
+        blueprints.setFont(defaultFont);
         backgroundPanel.add(blueprints);
 
         posters.setBounds(106, 570, 30, 30); // x, y, width, height
+        posters.setFont(defaultFont);
         backgroundPanel.add(posters);
 
         wood.setBounds(210, 525, 100, 30); // x, y, width, height
+        wood.setFont(defaultFont);
         backgroundPanel.add(wood);
 
         nails.setBounds(225, 540, 100, 30); // x, y, width, height
+        nails.setFont(defaultFont);
         backgroundPanel.add(nails);
 
         screws.setBounds(211, 555, 100, 30); // x, y, width, height
+        screws.setFont(defaultFont);
         backgroundPanel.add(screws);
 
         hardboard.setBounds(250, 570, 100, 30); // x, y, width, height
+        hardboard.setFont(defaultFont);
         backgroundPanel.add(hardboard);
 
 
@@ -292,8 +300,10 @@ public class GuiManager
         // autoTicker
         createAutoTicker();
 
-        JButton tickButton = new JButton("TICK");
-        tickButton.setBounds(490, 289, 75, 20);
+        JButton tickButton = new JButton();
+        tickButton.setBounds(522, 275, 48, 48);
+        tickButton.setIcon(new ImageIcon("furnishResources/TICK.png"));
+        tickButton.setRolloverIcon(new ImageIcon("furnishResources/TICK_HOVER.png"));
         backgroundPanel.add(tickButton);
         tickButton.addActionListener(new ActionListener() {
             @Override
@@ -305,8 +315,10 @@ public class GuiManager
             }
         });
 
-        JButton autoTickerToggle = new JButton("AUTO");
-        autoTickerToggle.setBounds(767, 289, 75, 20);
+        JButton autoTickerToggle = new JButton();
+        autoTickerToggle.setIcon(new ImageIcon("furnishResources/AUTOTICK_OFF.png"));
+        autoTickerToggle.setRolloverIcon(new ImageIcon("furnishResources/AUTOTICK_OFF_HOVER.png"));
+        autoTickerToggle.setBounds(767, 275, 48, 48);
         autoTickerToggle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -317,16 +329,21 @@ public class GuiManager
                 if (autoTickerActive)
                 {
                     onOff = "| ENABLED |";
-                    autoTickerToggle.setBackground(Color.green);
+                    autoTickerToggle.setIcon(new ImageIcon("furnishResources/AUTOTICK_ON.png"));
+                    autoTickerToggle.setRolloverIcon(new ImageIcon("furnishResources/AUTOTICK_ON_HOVER.png"));
                 }
                 else
                 {
                     onOff = "| DISABLED |";
-                    autoTickerToggle.setBackground(Color.red);
+                    autoTickerToggle.setIcon(new ImageIcon("furnishResources/AUTOTICK_OFF.png"));
+                    autoTickerToggle.setRolloverIcon(new ImageIcon("furnishResources/AUTOTICK_OFF_HOVER.png"));
 
                 }
 
-                writeInConsole("\n[AUTO-TICK] " + onOff);
+                writeInConsole("\n[AUTOTICKER] " + onOff);
+
+                // TODO on and off icon
+
                 updateGUI();
             }
         });
@@ -506,7 +523,7 @@ public class GuiManager
                 gamestate.buyResource(purchaseQuantity, gamestate.SCREWS);
                 if (gamestate.getResources()[gamestate.SCREWS] != wereThisMany)
                 {
-                    writeInConsole("[PURCHASE] BOUGHT "+ purchaseQuantity +" SCREW");
+                    writeInConsole("[PURCHASE] BOUGHT "+ purchaseQuantity +" SCREW"); // TODO should be in bulk
 
                 }
                 else
@@ -537,7 +554,7 @@ public class GuiManager
     }
 
     public static void updateGUI() {
-        posterText.setText("$" + gamestate.getPosterCost() + ":\nPut up poster");
+        posterText.setText("$" + gamestate.getPosterCost() + ":\nPUT UP POSTER");
         stools.setText(String.valueOf(gamestate.getFurnitures()[gamestate.STOOLS].getNumInStock()) + " owned");
         chairs.setText(String.valueOf(gamestate.getFurnitures()[gamestate.CHAIRS].getNumInStock()) + " owned");
         tables.setText(String.valueOf(gamestate.getFurnitures()[gamestate.TABLES].getNumInStock()) + " owned");

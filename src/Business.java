@@ -1,5 +1,3 @@
-package furnishsim;
-
 import java.util.Random;
 import java.lang.Math;
 
@@ -409,5 +407,6 @@ public class Business
     public void roundToTwo(double num) {
         num = (Math.round(num*100))/100;
     }
+
 }
 

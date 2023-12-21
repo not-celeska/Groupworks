@@ -1,5 +1,3 @@
-package furnishsim;
-
 import javax.swing.*;
 
 public class Furniture
