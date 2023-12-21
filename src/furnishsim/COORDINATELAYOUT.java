@@ -68,7 +68,7 @@ public class COORDINATELAYOUT
     AUTO TICKER
      */
     static Timer autoTickerTimer;
-    static boolean autoTickerActive;
+    static boolean autoTickerActive = false;
 
 
     public static void main(String[] args)
@@ -79,7 +79,7 @@ public class COORDINATELAYOUT
     public static void makeUI()
     {
         JFrame window = new JFrame();
-        window.setSize(850, 600);
+        window.setSize(865, 639);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setLocationRelativeTo(null);
         window.setResizable(false);
@@ -292,8 +292,10 @@ public class COORDINATELAYOUT
         // autoTicker
         createAutoTicker();
 
-        JButton tickButton = new JButton("TICK");
-        tickButton.setBounds(490, 289, 75, 20);
+        JButton tickButton = new JButton();
+        tickButton.setBounds(490, 275, 48, 48);
+        tickButton.setIcon(new ImageIcon("furnishResources/TICK.png"));
+        tickButton.setRolloverIcon(new ImageIcon("furnishResources/TICK_HOVER.png"));
         backgroundPanel.add(tickButton);
         tickButton.addActionListener(new ActionListener() {
             @Override
@@ -305,8 +307,10 @@ public class COORDINATELAYOUT
             }
         });
 
-        JButton autoTickerToggle = new JButton("AUTO");
-        autoTickerToggle.setBounds(767, 289, 75, 20);
+        JButton autoTickerToggle = new JButton();
+        autoTickerToggle.setIcon(new ImageIcon("furnishResources/AUTOTICK_OFF.png"));
+        autoTickerToggle.setRolloverIcon(new ImageIcon("furnishResources/AUTOTICK_OFF_HOVER.png"));
+        autoTickerToggle.setBounds(767, 275, 48, 48);
         autoTickerToggle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -317,12 +321,14 @@ public class COORDINATELAYOUT
                 if (autoTickerActive)
                 {
                     onOff = "| ENABLED |";
-                    autoTickerToggle.setBackground(Color.green);
+                    autoTickerToggle.setIcon(new ImageIcon("furnishResources/AUTOTICK_ON.png"));
+                    autoTickerToggle.setRolloverIcon(new ImageIcon("furnishResources/AUTOTICK_ON_HOVER.png"));
                 }
                 else
                 {
                     onOff = "| DISABLED |";
-                    autoTickerToggle.setBackground(Color.red);
+                    autoTickerToggle.setIcon(new ImageIcon("furnishResources/AUTOTICK_OFF.png"));
+                    autoTickerToggle.setRolloverIcon(new ImageIcon("furnishResources/AUTOTICK_OFF_HOVER.png"));
 
                 }
 
