@@ -564,8 +564,8 @@ public class GuiManager
         money.setText(String.format("$%.2f", gamestate.getMoney()));        blueprints.setText(String.valueOf(gamestate.getBlueprintsUnlocked()));
         posters.setText(String.valueOf(gamestate.getNumPosters()));
         wood.setText(String.valueOf(gamestate.getResources()[gamestate.WOOD]));
-        nails.setText(String.valueOf(gamestate.getResources()[gamestate.NAILS]));
-        screws.setText(String.valueOf(gamestate.getResources()[gamestate.SCREWS]));
+        nails.setText(String.valueOf(gamestate.getResources()[gamestate.SCREWS]));
+        screws.setText(String.valueOf(gamestate.getResources()[gamestate.NAILS]));
         hardboard.setText(String.valueOf(gamestate.getResources()[gamestate.HARDBOARD]));
 
         /*

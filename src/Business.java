@@ -98,15 +98,11 @@ public class Business
                             if (furniture.getNumInStock() > 0) {
                                 money += furniture.getSellingPrice();
                                 furniture.setNumInStock(furniture.getNumInStock() - 1);
-                                customerUpdates += "[TRANSACTION] " + furniture.getFurnitureName().toUpperCase() + " WAS BOUGHT | - 1 UNIT | + " + furniture.getSellingPrice() + "$\n";
+                                customerUpdates += "[TRANSACTION] " + furniture.getFurnitureName().toUpperCase() + " WAS BOUGHT \n              | - 1 UNIT | + " + furniture.getSellingPrice() + "$\n";
                                 customersInStore--;
                                 break;
                             }
                         }
-                    }
-                    else
-                    {
-                        customerUpdates += "[CUSTOMERS] CURRENTLY IN STORE: " + customersInStore + "\n";
                     }
                 }
             }
@@ -136,7 +132,7 @@ public class Business
         String eventUpdates = "";
 
         // probability of ANY event to happen: 10%
-        if (aiBehaviours.nextInt(1, 100) <= 5)
+        if (aiBehaviours.nextInt(1, 100) <= 20)
         {
             // another roll for which event happens (sections of 20+ intervals)
             int eventToOccur = aiBehaviours.nextInt(1, 100);
@@ -209,13 +205,13 @@ public class Business
                 if (aiBehaviours.nextBoolean())
                 {
                     // GOT PRAISED!
-                    eventUpdates += "[EVENT] \"w rizz chat\" | YOU WENT VIRAL |";
+                    eventUpdates += "[EVENT] \"w rizz chat\" \n        | YOU WENT VIRAL |";
                     popularity += 0.5;
                 }
                 else
                 {
                     // BOO! BAD INDUSTRIAL COMPANY!
-                    eventUpdates += "[EVENT] \"industrial revolution tiktok slideshow\" | YOUR REPUTATION WENT DOWN |";
+                    eventUpdates += "[EVENT] \"industrial revolution tiktok slideshow\" \n        | YOUR REPUTATION WENT DOWN |";
                     popularity -= 0.2;
                 }
 
