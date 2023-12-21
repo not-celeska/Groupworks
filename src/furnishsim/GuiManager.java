@@ -1,252 +1,313 @@
 package furnishsim;
 
+/*
+EXAMPLE BUTTON:
+
+...initialize button...
+...settings (icons, size)...
+... set function (copy/paste)...
+ */
+
+
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Timer;
 
-public class GuiManager {
-    Business gameState;
-    JFrame gameWindow;
-    JLabel businessData;
+public class GuiManager
+{
+    static Business gamestate = new Business();
 
-    // autoTicker
-    Timer autoTickerTimer;
-    boolean autoTickerActive = false;
+    /*
+     * TEXT AREAS
+     */
 
-    // textArea
-    JTextArea consoleText;
+    static JTextArea posterText = new JTextArea();
 
-    // INFORMATION LABELS
-    JLabel companyName;
-    JLabel moneyInfo;
-    JLabel popularityInfo; // tweaked version of customerAttraction
-    JLabel blueprintsUnlockedInfo;
-    JLabel numPostersInfo;
-    JLabel numWoodInfo;
-    JLabel numNailInfo;
-    JLabel numScrewInfo;
-    JLabel numHardwoodInfo;
+    static JLabel stools = new JLabel();
+    static JLabel chairs = new JLabel();
 
-    ArrayList<JButton> makeButtons = new ArrayList<>();
+    static JLabel tables = new JLabel();
 
-    // IMAGES
-    ImageIcon boughtIcon = new ImageIcon("furnishResources/BOUGHT.png");
+    static JLabel shelves = new JLabel();
+
+    static JLabel mailboxes = new JLabel();
+    static JLabel money = new JLabel();
+    static JLabel popularity = new JLabel();
+    static JLabel blueprints = new JLabel();
+    static JLabel posters = new JLabel();
+    static JLabel wood = new JLabel();
+    static JLabel nails = new JLabel();
+    static JLabel screws = new JLabel();
+    static JLabel hardboard = new JLabel();
+    static JTextArea consoleText = new JTextArea();
+    static JLabel backgroundImg = new JLabel();
+
+    static int purchaseQuantity = 1;
+
+    /*
+     * STATIC JBUTTONS
+     */
+
+    static JButton[] blueprintButtons = new JButton[] {new JButton(), new JButton(), new JButton(), new JButton(), new JButton()};
+
+    static JButton[] workshopButtons = new JButton[] {new JButton(), new JButton(), new JButton(), new JButton(), new JButton()};
+
+    static JButton buyPosterButton = new JButton();
+    static JButton buyStoreButton = new JButton();
+    static JButton timesOneButton = new JButton();
+    static JButton timesTenButton = new JButton();
+    static JButton buyWoodButton = new JButton();
+    static JButton buyNailsButton = new JButton();
+    static JButton buyHardboardButton = new JButton();
+    static JButton buyScrewsButton = new JButton();
+
+    /*
+    AUTO TICKER
+     */
+    static Timer autoTickerTimer;
+    static boolean autoTickerActive;
 
 
-    public GuiManager(Business gameState) {
-        this.gameState = gameState;
+    public static void main(String[] args)
+    {
+        new GuiManager().makeUI();
     }
 
-    public void runSimulation() {
-        gameWindow = new JFrame();
+    public static void makeUI()
+    {
+        JFrame window = new JFrame();
+        window.setSize(850, 600);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setLocationRelativeTo(null);
+        window.setResizable(false);
 
-        // BASIC SETTINGS
-        gameWindow.setSize(850, 600);
-        gameWindow.setResizable(true);
-        gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        gameWindow.setLocationRelativeTo(null);
-        gameWindow.setName("ISC3U - FURNISH_SIM");
-
-
-        // BIG PANEL
-        JPanel gamePanel = new JPanel();
-        gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
-        gameWindow.add(gamePanel);
-
-        // MEDIUM
-
-        // SMALLER PANELS
-        JPanel buyAndAdvertise = new JPanel(); // buy & advertise
-        JPanel buyingPanel = createBuyingOptionsPanel();
-        JPanel makePanel = createMakePanel();
-        JPanel blueprintPanel = createBlueprintPanel();
-        JPanel infoPanel = createInfoPanel();
-
-//        JPanel consolePanel = new JPanel();
-//        consolePanel.setMaximumSize(new Dimension( 500, 200));
-        consoleText = new JTextArea();
-        consoleText.setEditable(false);
-//        consolePanel.add(consoleText);
-        consoleText.setBackground(Color.pink);
-//        consoleText.setBounds(300, 300, 400, 400);
-//        consoleScrollPane = new JScrollPane(consoleText, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-//                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//        consolePanel.add(consoleScrollPane);
+        // Create a JPanel with custom paintComponent method to draw the background
+        JPanel backgroundPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                // Load the background image
+                ImageIcon backgroundImage = new ImageIcon("Resources/GUI.png");
+                Image img = backgroundImage.getImage();
+                g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
 
 
+        // Set the layout of the background panel to null for absolute positioning
+        backgroundPanel.setLayout(null);
 
-        // Add the  screen to the game window
-        gamePanel.add(buyAndAdvertise);
-        gamePanel.add(buyingPanel);
-        gamePanel.add(makePanel);
-        gamePanel.add(blueprintPanel);
-        gamePanel.add(consoleText);
-        gamePanel.add(infoPanel);
+        updateGUI();
 
-        // creates the auto ticker
+        /*
+         * BLUEPRINTS
+         */
+
+        // Stool
+        blueprintButtons[gamestate.STOOLS].setBounds(35, 97, 48, 48);
+        backgroundPanel.add(blueprintButtons[gamestate.STOOLS]);
+
+        // Chair
+        blueprintButtons[gamestate.CHAIRS].setBounds(35, 180, 48, 48);
+        backgroundPanel.add(blueprintButtons[gamestate.CHAIRS]);
+
+        // Table
+        blueprintButtons[gamestate.TABLES].setBounds(35, 263, 48, 48);
+        backgroundPanel.add(blueprintButtons[gamestate.TABLES]);
+
+        // Wall Shelf
+        blueprintButtons[gamestate.SHELVES].setBounds(122, 263, 48, 48);
+        backgroundPanel.add(blueprintButtons[gamestate.SHELVES]);
+
+        // Mailbox
+        blueprintButtons[gamestate.MAILBOXES].setBounds(205, 263, 48, 48);
+        backgroundPanel.add(blueprintButtons[gamestate.MAILBOXES]);
+
+
+
+        /*
+         * MISC
+         */
+
+        // Poster
+        buyPosterButton.setIcon(new ImageIcon("furnishResources/POSTER.png"));
+        buyPosterButton.setRolloverIcon(new ImageIcon("furnishResources/POSTER_HOVER.png"));
+        buyPosterButton.setPressedIcon(new ImageIcon("furnishResources/POSTER_PRESSED.png"));
+        buyPosterButton.setBounds(36, 414, 64, 80);
+        backgroundPanel.add(buyPosterButton);
+
+        // Store
+        buyStoreButton.setIcon(new ImageIcon("furnishResources/STORE.png"));
+        buyStoreButton.setRolloverIcon(new ImageIcon("furnishResources/STORE_HOVER.png"));
+        buyStoreButton.setPressedIcon(new ImageIcon("furnishResources/STORE_BOUGHT_2.png"));
+        buyStoreButton.setDisabledIcon(new ImageIcon("furnishResources/STORE_BOUGHT.png"));
+        buyStoreButton.setBounds(314, 36, 144, 48);
+        backgroundPanel.add(buyStoreButton);
+
+        // *1 button
+        timesOneButton.setIcon(new ImageIcon("furnishResources/1.png"));
+        timesOneButton.setRolloverIcon(new ImageIcon("furnishResources/1_HOVER.png"));
+        timesOneButton.setPressedIcon(new ImageIcon("furnishResources/1_CLICK.png"));
+        timesOneButton.setBounds(272, 97, 16, 48);
+        backgroundPanel.add(timesOneButton);
+
+        // *10 button
+        timesTenButton.setIcon(new ImageIcon("furnishResources/10.png"));
+        timesTenButton.setRolloverIcon(new ImageIcon("furnishResources/10_HOVER.png"));
+        timesTenButton.setPressedIcon(new ImageIcon("furnishResources/10_CLICK.png"));
+        timesTenButton.setBounds(272, 180, 16, 48);
+        backgroundPanel.add(timesTenButton);
+
+
+
+
+        /*
+         * MATERIALS
+         */
+
+        // wood
+        buyWoodButton.setIcon(new ImageIcon("furnishResources/WOOD.png"));
+        buyWoodButton.setRolloverIcon(new ImageIcon("furnishResources/WOOD_HOVER.png"));
+        buyWoodButton.setPressedIcon(new ImageIcon("furnishResources/WOOD_PRESSED.png"));
+        buyWoodButton.setBounds(122, 97, 48, 48);
+        backgroundPanel.add(buyWoodButton);
+
+        // nails
+        buyNailsButton.setIcon(new ImageIcon("furnishResources/NAIL.png"));
+        buyNailsButton.setRolloverIcon(new ImageIcon("furnishResources/NAIL_HOVER.png"));
+        buyNailsButton.setPressedIcon(new ImageIcon("furnishResources/NAIL_PRESSED.png"));
+        buyNailsButton.setBounds(205, 97, 48, 48);
+        backgroundPanel.add(buyNailsButton);
+
+        // hardboard
+        buyHardboardButton.setIcon(new ImageIcon("furnishResources/HARDWOOD.png")); // cannot be bothered to change the filename
+        buyHardboardButton.setRolloverIcon(new ImageIcon("furnishResources/HARDWOOD_HOVER.png"));
+        buyHardboardButton.setPressedIcon(new ImageIcon("furnishResources/HARDWOOD_PRESSED.png"));
+        buyHardboardButton.setBounds(122, 180, 48, 48);
+        backgroundPanel.add(buyHardboardButton);
+
+        // screws
+        buyScrewsButton.setIcon(new ImageIcon("furnishResources/SCREWS.png")); // cannot be bothered to change the filename
+        buyScrewsButton.setRolloverIcon(new ImageIcon("furnishResources/SCREWS_HOVER.png"));
+        buyScrewsButton.setPressedIcon(new ImageIcon("furnishResources/SCREWS_PRESSED.png"));
+        buyScrewsButton.setBounds(205, 180, 48, 48);
+        backgroundPanel.add(buyScrewsButton);
+
+        /*
+         * FURNITURE BUYING
+         */
+
+        // Stool
+        workshopButtons[0].setBounds(327, 185, 48, 48);
+        backgroundPanel.add(workshopButtons[0]);
+
+        // Chair
+        workshopButtons[1].setBounds(327, 268, 48, 48);
+        backgroundPanel.add(workshopButtons[1]);
+
+        // Table
+        workshopButtons[2].setBounds(327, 351, 48, 48);
+        backgroundPanel.add(workshopButtons[2]);
+
+        // Wall Shelf
+        workshopButtons[3].setBounds(327, 434, 48, 48);
+        backgroundPanel.add(workshopButtons[3]);
+
+        // Mailbox
+        workshopButtons[4].setBounds(327, 517, 48, 48);
+        backgroundPanel.add(workshopButtons[4]);
+
+        /*
+         * DRAW TEXT TO SCREEN
+         */
+
+        posterText.setBounds(122, 414, 100, 50); // x, y, width, height
+        posterText.setEditable(false);
+        posterText.setFont(new Font("Monospaced", Font.BOLD, 14));
+        posterText.setForeground(Color.black);
+        backgroundPanel.add(posterText);
+
+
+        stools.setBounds(327, 230, 100, 30); // x, y, width, height
+        backgroundPanel.add(stools);
+
+        chairs.setBounds(327, 308, 100, 30); // x, y, width, height
+        backgroundPanel.add(chairs);
+
+        tables.setBounds(327, 405, 100, 30); // x, y, width, height
+        backgroundPanel.add(tables);
+
+        shelves.setBounds(327, 474, 100, 30); // x, y, width, height
+        backgroundPanel.add(shelves);
+
+        mailboxes.setBounds(327, 557, 100, 30); // x, y, width, height
+        backgroundPanel.add(mailboxes);
+
+        money.setBounds(54, 525, 100, 30); // x, y, width, height
+        backgroundPanel.add(money);
+
+        popularity.setBounds(90, 540, 100, 30); // x, y, width, height
+        backgroundPanel.add(popularity);
+
+        blueprints.setBounds(145, 555, 100, 30); // x, y, width, height
+        backgroundPanel.add(blueprints);
+
+        posters.setBounds(106, 570, 30, 30); // x, y, width, height
+        backgroundPanel.add(posters);
+
+        wood.setBounds(210, 525, 100, 30); // x, y, width, height
+        backgroundPanel.add(wood);
+
+        nails.setBounds(225, 540, 100, 30); // x, y, width, height
+        backgroundPanel.add(nails);
+
+        screws.setBounds(211, 555, 100, 30); // x, y, width, height
+        backgroundPanel.add(screws);
+
+        hardboard.setBounds(250, 570, 100, 30); // x, y, width, height
+        backgroundPanel.add(hardboard);
+
+
+        /*
+         * GUI THAT COVERS THE CONSOLE
+         */
+
+        // background
+        JLabel consoleCover = new JLabel();
+        consoleCover.setIcon(new ImageIcon("furnishResources/CONSOLE_COVER.png"));
+        consoleCover.setBounds(483, 274, 366, 51);
+        backgroundPanel.add(consoleCover);
+
+        backgroundImg.setBounds(483, 0, 366, 274);
+
+        backgroundPanel.add(backgroundImg);
+
+        /*
+        TICK BUTTONS
+         */
+
+        // autoTicker
         createAutoTicker();
 
-        // Display the game window
-        gameWindow.setVisible(true);
-        writeInConsole(" > Simulation is ONLINE!\n" +
-                           "       -   This is where you will see things that happen! Have fun!");
-        updateGUI();
-    }
-
-    private JPanel createInfoPanel() {
-        JPanel infoPanel = new JPanel(); // information
-        infoPanel.setBackground(Color.lightGray);
-
-        // LABELS
-
-        businessData = new JLabel();
-        infoPanel.add(businessData);
-
-        companyName = new JLabel();
-        infoPanel.add(companyName);
-
-        moneyInfo = new JLabel();
-        infoPanel.add(moneyInfo);
-
-        popularityInfo = new JLabel();
-        infoPanel.add(popularityInfo);
-
-        blueprintsUnlockedInfo = new JLabel();
-        infoPanel.add(blueprintsUnlockedInfo);
-
-        numPostersInfo = new JLabel();
-        infoPanel.add(numPostersInfo);
-
-        numWoodInfo = new JLabel();
-        infoPanel.add(numWoodInfo);
-
-        numNailInfo = new JLabel();
-        infoPanel.add(numNailInfo);
-
-        numScrewInfo = new JLabel();
-        infoPanel.add(numScrewInfo);
-
-        numHardwoodInfo = new JLabel();
-        infoPanel.add(numHardwoodInfo);
-
-        // LAYOUT
-
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-
-        // RETURN
-
-        return infoPanel;
-    }
-
-    private JPanel createMakePanel() {
-        JPanel makePanel = new JPanel();
-
-        // HEADER / TEXT
-        JLabel header = new JLabel("MAKE: ");
-        makePanel.add(header);
-
-        // BUTTONS
-        for (Furniture furniture : gameState.getFurnitures()) {
-            JButton button = new JButton(furniture.getFurnitureName().charAt(0) + "");
-            button.setPreferredSize(new Dimension(48, 48));
-            if (!furniture.hasBlueprint())
-            {
-                button.setEnabled(false);
-            }
-            button.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int wereThisMany = furniture.getNumInStock();
-                    gameState.makeFurniture(furniture);
-                    // TODO if successful
-                    if (/* furniture.hasBlueprint()  && */ (furniture.getNumInStock() > wereThisMany))
-                    {
-                        writeInConsole("[MADE] 1 " + furniture.getFurnitureName().toUpperCase());
-                    }
-                    else
-                    {
-                        writeInConsole("[MADE] " + furniture.getFurnitureName().toUpperCase() + " BUILD UNSUCCESSFUL");
-                    }
-                    updateGUI();
-                }
-            });
-            makePanel.add(button);
-            makeButtons.add(button);
-        }
-
-        // RETURN
-        return makePanel;
-    }
-
-    private JPanel createBlueprintPanel() {
-        JPanel blueprintPanel = new JPanel();
-
-        // HEADER / TEXT
-        JLabel header = new JLabel("BLUEPRINTS: ");
-        blueprintPanel.add(header);
-
-        // BUTTONS
-        for (Furniture furniture : gameState.getFurnitures()) {
-            if (!furniture.hasBlueprint()) {
-                JButton buyBlueprintButton = new JButton();
-                buyBlueprintButton.setPreferredSize(new Dimension(48, 48));
-                buyBlueprintButton.setIcon(furniture.getIcon());
-                buyBlueprintButton.setRolloverEnabled(true);
-                buyBlueprintButton.setRolloverIcon(furniture.getHoverIcon());
-                buyBlueprintButton.setPressedIcon(furniture.getClickIcon());
-                buyBlueprintButton.setDisabledIcon(boughtIcon);
-                buyBlueprintButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        gameState.buyBlueprint(furniture);
-                        if (furniture.hasBlueprint()) {
-                            writeInConsole("[BLUEPRINT] BOUGHT " + furniture.getFurnitureName().toUpperCase() + " SUCCESSFULLY");
-                            buyBlueprintButton.setEnabled(false);
-                        } else {
-                            writeInConsole("[BLUEPRINT] FAILED TO BUY " + furniture.getFurnitureName().toUpperCase());
-                        }
-                        updateGUI();
-                    }
-                });
-                blueprintPanel.add(buyBlueprintButton);
-            }
-        }
-
-        // RETURN
-        return blueprintPanel;
-
-    }
-
-    private JPanel createBuyingOptionsPanel() {
-        JPanel buyingOptionPanel = new JPanel();
-
-        // label
-        JLabel title = new JLabel("OPTIONS: ");
-        buyingOptionPanel.add(title);
-
-
-        // TICK BUTTON
         JButton tickButton = new JButton("TICK");
+        tickButton.setBounds(490, 289, 75, 20);
+        backgroundPanel.add(tickButton);
         tickButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameState.setTicksActive(gameState.getTicksActive() + 1);
-                consoleText.setText(" # NEW TICK [" + gameState.getTicksActive() + "]");
-                consoleText.append(gameState.tick());
+                gamestate.setTicksActive(gamestate.getTicksActive() + 1);
+                consoleText.setText(" # NEW TICK [" + gamestate.getTicksActive() + "]");
+                consoleText.append(gamestate.tick());
                 updateGUI();
             }
         });
 
-        // AUTO TICKER
-
-        JButton autoTickerButton = new JButton("AUTO TICKER");
-        autoTickerButton.addActionListener(new ActionListener() {
+        JButton autoTickerToggle = new JButton("AUTO");
+        autoTickerToggle.setBounds(767, 289, 75, 20);
+        autoTickerToggle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 autoTickerActive = !(autoTickerActive);
@@ -256,161 +317,126 @@ public class GuiManager {
                 if (autoTickerActive)
                 {
                     onOff = "| ENABLED |";
-                    autoTickerButton.setBackground(Color.green);
+                    autoTickerToggle.setBackground(Color.green);
                 }
                 else
                 {
                     onOff = "| DISABLED |";
-                    autoTickerButton.setBackground(Color.red);
+                    autoTickerToggle.setBackground(Color.red);
 
                 }
 
-                writeInConsole("\n[AUTOTICKER] " + onOff);
-
-                // TODO on and off icon
-
+                writeInConsole("\n[AUTO-TICK] " + onOff);
                 updateGUI();
             }
         });
+        backgroundPanel.add(autoTickerToggle);
+
+        /*
+         * IMPORTANT: DRAW THE CONSOLE AFTER THIS
+         */
+        consoleText.setBackground(Color.white);
+        consoleText.setFont(new Font("Monospaced", Font.BOLD, 14));
+        consoleText.setForeground(Color.black);
+        consoleText.setEditable(false);
+        consoleText.setBounds(483, 325, 377, 275);
+        backgroundPanel.add(consoleText);
+        writeInConsole(" > Welcome to furnishSim!\n" +
+                            "   - You have $150, use it to buy stuff!\n" +
+                            "   - Claim your free blueprint in the shop!\n" +
+                            "   - Build things, advertise, and have fun!\n\n" +
+                            " Press the [TICK] button to go through ticks, or\n" +
+                            " use [AUTO-TICK] to have it be automatic.\n----------------------------------------------\n");
+
+//         consoleCover.setBounds(483, 274, 366, 51);
 
 
-        // TODO add 1 or 10 per button through <-- just make bulk
-        // BUY WOOD BUTTON
-        JButton buyWoodButton = new JButton();
-        buyWoodButton.setPreferredSize(new Dimension(48, 48));
-        buyWoodButton.setIcon(new ImageIcon("furnishResources/WOOD.png"));
-        buyWoodButton.setRolloverIcon(new ImageIcon("furnishResources/WOOD_HOVER.png"));
-        buyWoodButton.setPressedIcon(new ImageIcon("furnishResources/WOOD_PRESSED.png"));
-        buyWoodButton.addActionListener(new ActionListener() {
+        // Add the background panel to the JFrame
+        window.add(backgroundPanel);
+        window.setVisible(true);
+
+        ButtonListeners();
+    }
+
+    public static void ButtonListeners() {
+        /*
+         * For loops for buying blueprints and building things
+         */
+
+        for (int i = 0; i < workshopButtons.length; i++) {
+            Furniture furniture = gamestate.getFurnitures()[i];
+            int furNum = i;
+
+            workshopButtons[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int wereThisMany = furniture.getNumInStock();
+                    gamestate.makeFurniture(furniture);
+                    if (furniture.getNumInStock() > wereThisMany) {
+                        writeInConsole("[MADE] 1 " + furniture.getFurnitureName().toUpperCase());
+                    } else {
+                        writeInConsole("[MADE] " + furniture.getFurnitureName().toUpperCase() + ": BUILD UNSUCCESSFUL");
+                    }
+
+                    updateGUI();
+
+                    gamestate.getFurnitures()[furNum].setNumInStock(furniture.getNumInStock());
+                }
+            });
+        }
+        for (int i = 0; i < blueprintButtons.length; i++) {
+            Furniture furniture = gamestate.getFurnitures()[i];
+            int furNum = i;
+
+            blueprintButtons[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    gamestate.buyBlueprint(furniture);
+                    if (furniture.hasBlueprint()) {
+                        writeInConsole("[BLUEPRINT] BOUGHT " + furniture.getFurnitureName().toUpperCase() + " SUCCESSFULLY");
+                    } else {
+                        writeInConsole("[BLUEPRINT] FAILED TO BUY " + furniture.getFurnitureName().toUpperCase());
+                    }
+                    updateGUI();
+
+                    gamestate.getFurnitures()[furNum] = furniture;
+                }
+            });
+        }
+
+        /*
+         * Material Purchases
+         */
+
+        timesOneButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int wereThisMany = gameState.getResources()[gameState.WOOD];
-                gameState.buyResource(1, gameState.WOOD);
-                if (gameState.getResources()[gameState.WOOD] != wereThisMany)
-                {
-                    writeInConsole("[PURCHASE] BOUGHT 1 WOOD");
-
-                }
-                else
-                {
-                    writeInConsole("[PURCHASE] WOOD PURCHASE FAILED");
-                }
-
-                updateGUI();
+                purchaseQuantity = 1;
+                timesOneButton.setEnabled(false);
+                timesTenButton.setEnabled(true);
             }
         });
 
-
-        // BUY NAILS BUTTOn
-        JButton buyNailButton = new JButton();
-        buyNailButton.setPreferredSize(new Dimension(48, 48));
-        buyNailButton.setIcon(new ImageIcon("furnishResources/NAIL.png"));
-        buyNailButton.setRolloverIcon(new ImageIcon("furnishResources/NAIL_HOVER.png"));
-        buyNailButton.setPressedIcon(new ImageIcon("furnishResources/NAIL_PRESSED.png"));
-        buyNailButton.addActionListener(new ActionListener() {
+        timesTenButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                int wereThisMany = gameState.getResources()[gameState.NAILS];
-                gameState.buyResource(1, gameState.NAILS);
-                if (gameState.getResources()[gameState.NAILS] != wereThisMany)
-                {
-                    writeInConsole("[PURCHASE] BOUGHT 1 NAIL");
-
-                }
-                else
-                {
-                    writeInConsole("[PURCHASE] NAIL PURCHASE FAILED");
-                }
+            public void actionPerformed(ActionEvent e)
+            {
+                purchaseQuantity = 10;
+                timesOneButton.setEnabled(true);
+                timesTenButton.setEnabled(false);
                 updateGUI();
+
             }
         });
-
-        // BUY SCREWS BUTTON
-        JButton buyScrewsButton = new JButton();
-        buyScrewsButton.setPreferredSize(new Dimension(48, 48));
-        buyScrewsButton.setIcon(new ImageIcon("furnishResources/SCREWS.png"));
-        buyScrewsButton.setRolloverIcon(new ImageIcon("furnishResources/SCREWS_HOVER.png"));
-        buyScrewsButton.setPressedIcon(new ImageIcon("furnishResources/SCREWS_PRESSED.png"));
-        buyScrewsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int wereThisMany = gameState.getResources()[gameState.SCREWS];
-                gameState.buyResource(1, gameState.SCREWS);
-                if (gameState.getResources()[gameState.SCREWS] != wereThisMany)
-                {
-                    writeInConsole("[PURCHASE] BOUGHT 1 SCREW"); // TODO should be in bulk
-
-                }
-                else
-                {
-                    writeInConsole("[PURCHASE] SCREW PURCHASE FAILED");
-                }
-
-                updateGUI();
-            }
-        });
-
-        // hardwood
-        JButton buyHardwoodButton = new JButton();
-        buyHardwoodButton.setPreferredSize(new Dimension(48, 48));
-        buyHardwoodButton.setIcon(new ImageIcon("furnishResources/HARDWOOD.png"));
-        buyHardwoodButton.setRolloverIcon(new ImageIcon("furnishResources/HARDWOOD_HOVER.png"));
-        buyHardwoodButton.setPressedIcon(new ImageIcon("furnishResources/HARDWOOD_PRESSED.png"));
-        buyHardwoodButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int wereThisMany = gameState.getResources()[gameState.HARDBOARD];
-                gameState.buyResource(1, gameState.HARDBOARD);
-                if (gameState.getResources()[gameState.HARDBOARD] != wereThisMany)
-                {
-                    writeInConsole("[PURCHASE] BOUGHT 1 HARDBOARD");
-
-                }
-                else
-                {
-                    writeInConsole("[PURCHASE] HARDWOOD PURCHASE FAILED");
-                }
-                updateGUI();
-            }
-        });
-
-
-        // store
-        JButton buyStoreButton = new JButton();
-        buyStoreButton.setPreferredSize(new Dimension(144, 48));
-        buyStoreButton.setIcon(new ImageIcon("furnishResources/STORE.png"));
-        buyStoreButton.setRolloverIcon(new ImageIcon("furnishResources/STORE_HOVER.png"));
-        buyStoreButton.setPressedIcon(new ImageIcon("furnishResources/STORE_PRESSED.png"));
-        buyStoreButton.setDisabledIcon(new ImageIcon("furnishResources/STORE_BOUGHT.png"));
-        buyStoreButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                gameState.buyStore();
-                if (gameState.isBoughtStore()) {
-                    writeInConsole("[STORE-PURCHASE] BOUGHT STORE SUCCESSFULLY." +
-                                "\n  > CONGRATS PLAYER, YOU WON!");
-                } else {
-                    writeInConsole("[STORE-PURCHASE] FAILED TO BUY STORE");
-                }
-                updateGUI();
-            }
-        });
-
-
-        // poster
-
-        JButton buyPosterButton = new JButton();
-        buyPosterButton.setPreferredSize(new Dimension(64, 80));
-        buyPosterButton.setIcon(new ImageIcon("furnishResources/POSTER.png"));
-        buyPosterButton.setRolloverIcon(new ImageIcon("furnishResources/POSTER_HOVER.png"));
-        buyPosterButton.setPressedIcon(new ImageIcon("furnishResources/POSTER_PRESSED.png"));
+        /*
+         * MISC BUTTONS
+         */
         buyPosterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int wereThisMany = gameState.getNumPosters();
-                gameState.putUpPoster();
-                if (gameState.getNumPosters() != wereThisMany)
+                int wereThisMany = gamestate.getNumPosters();
+                gamestate.putUpPoster();
+                if (gamestate.getNumPosters() != wereThisMany)
                 {
                     writeInConsole("[ADVERTISEMENT] PUT UP ONE POSTER");
 
@@ -422,22 +448,165 @@ public class GuiManager {
                 updateGUI();
             }
         });
-        buyingOptionPanel.add(buyPosterButton);
+        buyStoreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
+                gamestate.buyStore();
+                if (gamestate.isBoughtStore()) {
+                    buyStoreButton.setEnabled(false);
+                    writeInConsole("[STORE-PURCHASE] BOUGHT STORE SUCCESSFULLY." +
+                            "\n  > CONGRATS PLAYER, YOU WON!");
+                } else {
+                    writeInConsole("[STORE-PURCHASE] FAILED TO BUY STORE");
+                }
+                updateGUI();
+            }
+        });
 
-        // ADDING TO SCREEN & WINDOW
-        buyingOptionPanel.add(autoTickerButton);
-        buyingOptionPanel.add(tickButton);
-        buyingOptionPanel.add(buyNailButton);
-        buyingOptionPanel.add(buyScrewsButton);
-        buyingOptionPanel.add(buyWoodButton);
-        buyingOptionPanel.add(buyHardwoodButton);
-        buyingOptionPanel.add(buyStoreButton);
+        buyWoodButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gamestate.getResources()[gamestate.WOOD];
+                gamestate.buyResource(purchaseQuantity, gamestate.WOOD);
+                if (gamestate.getResources()[gamestate.WOOD] != wereThisMany)
+                {
+                    writeInConsole("[PURCHASE] BOUGHT "+ purchaseQuantity +" WOOD");
 
-        return buyingOptionPanel;
+                }
+                else
+                {
+                    writeInConsole("[PURCHASE] WOOD PURCHASE FAILED");
+                }
+
+                updateGUI();
+            }
+        });
+        buyNailsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gamestate.getResources()[gamestate.NAILS];
+                gamestate.buyResource(purchaseQuantity, gamestate.NAILS);
+                if (gamestate.getResources()[gamestate.NAILS] != wereThisMany)
+                {
+                    writeInConsole("[PURCHASE] BOUGHT " + purchaseQuantity + " NAIL");
+
+                }
+                else
+                {
+                    writeInConsole("[PURCHASE] NAIL PURCHASE FAILED");
+                }
+                updateGUI();
+            }
+        });
+        buyScrewsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gamestate.getResources()[gamestate.SCREWS];
+                gamestate.buyResource(purchaseQuantity, gamestate.SCREWS);
+                if (gamestate.getResources()[gamestate.SCREWS] != wereThisMany)
+                {
+                    writeInConsole("[PURCHASE] BOUGHT "+ purchaseQuantity +" SCREW");
+
+                }
+                else
+                {
+                    writeInConsole("[PURCHASE] SCREW PURCHASE FAILED");
+                }
+
+                updateGUI();
+            }
+        });
+        buyHardboardButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int wereThisMany = gamestate.getResources()[gamestate.HARDBOARD];
+                gamestate.buyResource(purchaseQuantity, gamestate.HARDBOARD);
+                if (gamestate.getResources()[gamestate.HARDBOARD] != wereThisMany)
+                {
+                    writeInConsole("[PURCHASE] BOUGHT "+ purchaseQuantity +" HARDBOARD");
+
+                }
+                else
+                {
+                    writeInConsole("[PURCHASE] HARDWOOD PURCHASE FAILED");
+                }
+                updateGUI();
+            }
+        });
     }
 
-    public void createAutoTicker()
+    public static void updateGUI() {
+        posterText.setText("$" + gamestate.getPosterCost() + ":\nPut up poster");
+        stools.setText(String.valueOf(gamestate.getFurnitures()[gamestate.STOOLS].getNumInStock()) + " owned");
+        chairs.setText(String.valueOf(gamestate.getFurnitures()[gamestate.CHAIRS].getNumInStock()) + " owned");
+        tables.setText(String.valueOf(gamestate.getFurnitures()[gamestate.TABLES].getNumInStock()) + " owned");
+        shelves.setText(String.valueOf(gamestate.getFurnitures()[gamestate.SHELVES].getNumInStock()) + " owned");
+        mailboxes.setText(String.valueOf(gamestate.getFurnitures()[gamestate.MAILBOXES].getNumInStock()) + " owned");
+        popularity.setText(String.valueOf(Math.round(gamestate.getPopularity() * 100)) + "%");
+        money.setText(String.format("$%.2f", gamestate.getMoney()));        blueprints.setText(String.valueOf(gamestate.getBlueprintsUnlocked()));
+        posters.setText(String.valueOf(gamestate.getNumPosters()));
+        wood.setText(String.valueOf(gamestate.getResources()[gamestate.WOOD]));
+        nails.setText(String.valueOf(gamestate.getResources()[gamestate.NAILS]));
+        screws.setText(String.valueOf(gamestate.getResources()[gamestate.SCREWS]));
+        hardboard.setText(String.valueOf(gamestate.getResources()[gamestate.HARDBOARD]));
+
+        /*
+         * ICON CHANGES (FOR BLUEPRINTS AND BUILDING)
+         */
+        for (int i = 0; i < blueprintButtons.length; i++) {
+            Furniture furniture = gamestate.getFurnitures()[i];
+            JButton button = blueprintButtons[i];
+
+            if (furniture.hasBlueprint()) {
+                button.setDisabledIcon(new ImageIcon("furnishResources/BOUGHT.png"));
+                button.setEnabled(false);
+            }
+            else {
+                button.setIcon(new ImageIcon("furnishResources/" + furniture.getFurnitureName().toUpperCase() + ".png"));
+                button.setRolloverIcon(new ImageIcon("furnishResources/" + furniture.getFurnitureName().toUpperCase() + "_HOVER.png"));
+                button.setPressedIcon(new ImageIcon("furnishResources/" + gamestate.getFurnitures()[i].getFurnitureName().toUpperCase() + "_PRESSED.png"));
+            }
+        }
+
+        for (int i = 0; i < workshopButtons.length; i++) {
+            JButton button = workshopButtons[i];
+            Furniture furniture = gamestate.getFurnitures()[i];
+
+            button.setIcon(new ImageIcon("furnishResources/" + furniture.getFurnitureName().toUpperCase() + ".png"));
+            button.setRolloverIcon(new ImageIcon("furnishResources/" + furniture.getFurnitureName().toUpperCase() + "_HOVER.png"));
+            button.setPressedIcon(new ImageIcon("furnishResources/" + furniture.getFurnitureName().toUpperCase() + "_PRESSED.png"));
+
+            if (! gamestate.getFurnitures()[i].hasBlueprint()) {
+                button.setDisabledIcon(new ImageIcon("furnishResources/NO_BLUEPRINT.png"));
+                button.setEnabled(false);
+            }
+            else {
+                button.setEnabled(true);
+                button.setIcon(new ImageIcon("furnishResources/" + furniture.getFurnitureName().toUpperCase() + ".png"));
+                button.setRolloverIcon(new ImageIcon("furnishResources/" + furniture.getFurnitureName().toUpperCase() + "_HOVER.png"));
+                button.setPressedIcon(new ImageIcon("furnishResources/" + furniture.getFurnitureName().toUpperCase() + "_PRESSED.png"));
+            }
+        }
+        if (gamestate.isBoughtStore()) {
+            backgroundImg.setIcon(new ImageIcon("furnishResources/STOREBG.png"));
+        } else {
+            backgroundImg.setIcon(new ImageIcon("furnishResources/WORKSHOP.png"));
+        }
+
+
+
+
+
+
+
+
+    }
+    public static void writeInConsole(String msg) {
+        consoleText.append(msg + "\n");
+    }
+
+    public static void createAutoTicker()
     {
         autoTickerTimer = new Timer();
 
@@ -448,9 +617,9 @@ public class GuiManager {
                 if (autoTickerActive)
                 {
                     // also happens in the plain tick
-                    gameState.setTicksActive(gameState.getTicksActive() + 1);
-                    consoleText.setText("> (AUTO) NEW TICK [" + gameState.getTicksActive() + "]\n");
-                    consoleText.append(gameState.tick());
+                    gamestate.setTicksActive(gamestate.getTicksActive() + 1);
+                    consoleText.setText("> (AUTO) NEW TICK [" + gamestate.getTicksActive() + "]\n");
+                    consoleText.append(gamestate.tick());
 
                     updateGUI();
                 }
@@ -458,28 +627,4 @@ public class GuiManager {
         }, 2000, 2000);
     }
 
-    public void writeInConsole(String message) {
-        consoleText.append("\n" + message);
-    }
-
-    public void updateGUI() {
-        businessData.setText("---"/*gameState.toString()*/);
-        companyName.setText(gameState.getCompanyName());
-        moneyInfo.setText("MONEY: " + gameState.getMoney() + "$");
-        popularityInfo.setText("POPULARITY: " + Math.round(gameState.getCustomerAttraction() * 100) + "%");
-        blueprintsUnlockedInfo.setText("BLUEPRINTS UNLOCKED: " + gameState.getBlueprintsUnlocked());
-        numPostersInfo.setText("# OF POSTERS: " + gameState.getNumPosters());
-        numWoodInfo.setText("WOOD: " + gameState.getResources()[gameState.WOOD]);
-        numNailInfo.setText("NAIL: " + gameState.getResources()[gameState.NAILS]);
-        numScrewInfo.setText("SCREW: " + gameState.getResources()[gameState.SCREWS]);
-        numHardwoodInfo.setText("HARDWOOD: " + gameState.getResources()[gameState.HARDBOARD]);
-
-/*
-        images (stage)
-        log
-         */
-
-
-        // this should update the guis for when something is bought, reset the text, etc.
-    }
 }

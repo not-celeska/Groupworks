@@ -15,9 +15,8 @@ public class Business
 
     private String companyName;
     private boolean storeBought;
-    private double customerAttraction;
+    private double popularity;
     private double money;
-    private int profit; // TODO: -40 AT THE START.
     private int[] resources;
     final private double[] resourcePrice = {8.0, 0.15, 0.05, 32};
     final public int WOOD = 0;
@@ -31,8 +30,7 @@ public class Business
     final public int SHELVES = 3;
     final public int MAILBOXES = 4;
 
-    // TODO: ADD BALANCING CHANGES
-    private Furniture[] furnitures = { // TODO ADD THE REST OF THE ICONS
+    private Furniture[] furnitures = {
             /* new Furniture("Stool", 0, 3, 10, true),*/
             new Furniture("Stool", 0.0, new int[] {2, 4, 0, 0}, 17.6, false, "furnishResources/STOOL.png", "furnishResources/STOOL_HOVER.png", "furnishResources/STOOL_PRESSED.png"),
             new Furniture("Chair", 200.0, new int[] {3, 6, 4, 0}, 25.1, false, "furnishResources/CHAIR.png", "furnishResources/CHAIR_HOVER.png", "furnishResources/CHAIR_PRESSED.png"),
@@ -41,9 +39,9 @@ public class Business
             new Furniture("Mailbox", 1500, new int[] {3, 40, 12, 0}, 30.6, false, "furnishResources/MAILBOX.png", "furnishResources/MAILBOX_HOVER.png", "furnishResources/MAILBOX_PRESSED.png") };
     private int ticksActive;
     private int customersInStore;
-    private int enterPercentage; // <-- will change based off stage
+    private int enterPercentage;
     private int numberOfPosters;
-    final private int POSTER_PRICE = 150; // TODO: price changes based off of numberOfPosters.
+    final private int POSTER_PRICE = 150;
 
     public Business()
     {
@@ -51,10 +49,9 @@ public class Business
         money = 150;
         storeBought = false;
         ticksActive = 0;
-        profit = 0;
         resources = new int[] {0, 0, 0, 0};
-        enterPercentage = 45; // STAGE 1 STAT.
-        customerAttraction = 1.0;
+        enterPercentage = 45; // STAGE 1 STAT --> increased to 70 when store bought.
+        popularity = 1.0;
         numberOfPosters = 0;
     }
 
@@ -88,16 +85,15 @@ public class Business
         if (customersInStore > 0) {
             for (int customer = 1; customer <= customersInStore; customer++) {
                 // checks stock
-                if (findTotalStock() == 0) { //  no stock TODO say how many customers in store
+                if (findTotalStock() == 0) {
                     customerUpdates += "[CUSTOMER] NO ITEMS IN STOCK: CUSTOMER LEFT\n";
                     customersInStore -= 1;
-                    customerAttraction -= 0.025;
+                    popularity -= 0.025;
                     break;
                 }
                 // there are people in the store
                 else
                 {
-                    // TODO: make random selection; not in line. (tip, change order of if and for)
                     if (aiBehaviours.nextInt(1, 100) <= 30) {
                         // checks availibility in order; might randomize for realism later through random indexing [5-15min]
                         for (Furniture furniture : furnitures) {
@@ -117,19 +113,23 @@ public class Business
                 }
             }
         }
-        else
+
+        double customerEnterPercentage = popularity * enterPercentage;
+        if (aiBehaviours.nextDouble(0.0, 100.0) <= customerEnterPercentage)
+        {
+            int howManyEntered = aiBehaviours.nextInt(1, 5);
+            customersInStore += howManyEntered;
+            customerUpdates += "[CUSTOMER] " + howManyEntered + " ENTERED STORE\n";
+        }
+
+        if (customersInStore == 0)
         {
             customerUpdates += "[CUSTOMERS] NO CUSTOMERS IN STORE\n";
         }
-
-        double customerEnterPercentage = customerAttraction * enterPercentage; // [stage.getEnterPercentage] store popularity  ; TODO rename variable
-        if (aiBehaviours.nextDouble(0.0, 100.0) <= customerEnterPercentage)
+        else
         {
-            customersInStore++;
-            customerUpdates += "[CUSTOMER] ENTERED STORE\n";
-            // TODO multiple people
+            customerUpdates += "[CUSTOMER] IN STORE: " + customersInStore + "\n";
         }
-
         return customerUpdates;
     }
 
@@ -160,7 +160,7 @@ public class Business
                 }
 
                 // how could you get robbed so easily??
-                customerAttraction -= 0.1;
+                popularity -= 0.1;
 
             }
             else if (eventToOccur <= 40)
@@ -188,8 +188,7 @@ public class Business
             {
                 // EVENT 3 | FURNITURE BREAKS
                 // random --> -= stock
-                eventUpdates = "[EVENT] you woulda lost some furniture if it wasnt for this tupoy programmer!";
-                // TODO
+                eventUpdates = "[EVENT] you woulda lost some furniture if \n        it wasnt for this tupoy programmer!";
             }
             else if (eventToOccur <= 80)
             {
@@ -213,13 +212,13 @@ public class Business
                 {
                     // GOT PRAISED!
                     eventUpdates += "[EVENT] \"w rizz chat\" | YOU WENT VIRAL |";
-                    customerAttraction += 0.5;
+                    popularity += 0.5;
                 }
                 else
                 {
                     // BOO! BAD INDUSTRIAL COMPANY!
                     eventUpdates += "[EVENT] \"industrial revolution tiktok slideshow\" | YOUR REPUTATION WENT DOWN |";
-                    customerAttraction -= 0.2;
+                    popularity -= 0.2;
                 }
 
             }
@@ -297,8 +296,8 @@ public class Business
         if (money >= POSTER_PRICE)
         {
             money -= POSTER_PRICE;
-            customerAttraction += Math.round(1000.0 * (5.0 / ((Math.pow(numberOfPosters, 2.0)) + 25.0))) / 1000.0;
-            roundToTwo(customerAttraction);
+            popularity += Math.round(1000.0 * (5.0 / ((Math.pow(numberOfPosters, 2.0)) + 25.0))) / 1000.0;
+            roundToTwo(popularity);
             numberOfPosters++;
         }
     }
@@ -327,16 +326,16 @@ public class Business
         return numberOfPosters;
     }
 
-    public double getCustomerAttraction()
+    public double getPopularity()
     {
-        return customerAttraction;
+        return popularity;
     }
 
-    public String toString()
+    public String toString() // was used back when we used text-based to test
     {
         // all basic info
         String businessData = companyName.toUpperCase() + " | " + "MONEY: " + money + "$ | WOOD: " + resources[WOOD] + " | NAILS: " + resources[NAILS] + " | SCREWS: " + resources[SCREWS] + " | HARDWOOD: " + resources[HARDBOARD] +
-                " | TICKS SINCE START: " + ticksActive + " | TOTAL STOCK: " + findTotalStock() + " | CUSTOMERS IN STORE: " + customersInStore + " | TOTAL PROFITS: " + profit + " | CUSTOMER ATTRACTION: " + customerAttraction + " | ";
+                " | TICKS SINCE START: " + ticksActive + " | TOTAL STOCK: " + findTotalStock() + " | CUSTOMERS IN STORE: " + customersInStore  + " | CUSTOMER ATTRACTION: " + popularity + " | ";
 
         // stock
         for (Furniture furniture : furnitures)

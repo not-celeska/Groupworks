@@ -19,10 +19,6 @@ public class Furniture
     private ImageIcon hoverIcon;
     private ImageIcon clickIcon;
 
-    // TODO have distinction between blueprint icon and build icon
-    private ImageIcon makeFurniture;
-
-
     // ========================================
 
     public Furniture(String furnitureName, double blueprintCost, int[] resourceCost, double sellingPrice, boolean hasBlueprint, String iconFilepath, String hoverIconFilepath, String clickIconFilepath) {
