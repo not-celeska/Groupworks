@@ -43,8 +43,7 @@ public class COORDINATELAYOUT
     static JTextArea consoleText = new JTextArea();
     static JLabel backgroundImg = new JLabel();
 
-
-
+    static int purchaseQuantity = 1;
 
     /*
      * STATIC JBUTTONS
@@ -74,9 +73,10 @@ public class COORDINATELAYOUT
     public static void makeUI()
     {
         JFrame window = new JFrame();
-        window.setSize(865, 639);
+        window.setSize(850, 600);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(true);
+        window.setLocationRelativeTo(null);
+        window.setResizable(false);
 
         // Create a JPanel with custom paintComponent method to draw the background
         JPanel backgroundPanel = new JPanel() {
@@ -130,7 +130,7 @@ public class COORDINATELAYOUT
         buyPosterButton.setIcon(new ImageIcon("furnishResources/POSTER.png"));
         buyPosterButton.setRolloverIcon(new ImageIcon("furnishResources/POSTER_HOVER.png"));
         buyPosterButton.setPressedIcon(new ImageIcon("furnishResources/POSTER_PRESSED.png"));
-        buyPosterButton.setBounds(35, 414, 64, 80);
+        buyPosterButton.setBounds(36, 414, 64, 80);
         backgroundPanel.add(buyPosterButton);
 
         // Store
@@ -294,6 +294,9 @@ public class COORDINATELAYOUT
         consoleText.setEditable(false);
         consoleText.setBounds(483, 325, 377, 275);
         backgroundPanel.add(consoleText);
+        writeInConsole(" > Welcome! SIMULATION STARTED.\n" +
+                            "   - You have $150, use it to buy stuff!\n" +
+                            "   - Claim your free blueprint in the shop!");
 
 //         consoleCover.setBounds(483, 274, 366, 51);
 
@@ -351,14 +354,30 @@ public class COORDINATELAYOUT
             });
         }
 
-
-
-
-
         /*
          * Material Purchases
          */
 
+        timesOneButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                purchaseQuantity = 1;
+                timesOneButton.setEnabled(false);
+                timesTenButton.setEnabled(true);
+            }
+        });
+
+        timesTenButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                purchaseQuantity = 10;
+                timesOneButton.setEnabled(true);
+                timesTenButton.setEnabled(false);
+                updateGUI();
+
+            }
+        });
         /*
          * MISC BUTTONS
          */
@@ -394,14 +413,15 @@ public class COORDINATELAYOUT
                 updateGUI();
             }
         });
+
         buyWoodButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int wereThisMany = gamestate.getResources()[gamestate.WOOD];
-                gamestate.buyResource(1, gamestate.WOOD);
+                gamestate.buyResource(purchaseQuantity, gamestate.WOOD);
                 if (gamestate.getResources()[gamestate.WOOD] != wereThisMany)
                 {
-                    writeInConsole("[PURCHASE] BOUGHT 1 WOOD");
+                    writeInConsole("[PURCHASE] BOUGHT "+ purchaseQuantity +" WOOD");
 
                 }
                 else
@@ -416,10 +436,10 @@ public class COORDINATELAYOUT
             @Override
             public void actionPerformed(ActionEvent e) {
                 int wereThisMany = gamestate.getResources()[gamestate.NAILS];
-                gamestate.buyResource(1, gamestate.NAILS);
+                gamestate.buyResource(purchaseQuantity, gamestate.NAILS);
                 if (gamestate.getResources()[gamestate.NAILS] != wereThisMany)
                 {
-                    writeInConsole("[PURCHASE] BOUGHT 1 NAIL");
+                    writeInConsole("[PURCHASE] BOUGHT " + purchaseQuantity + " NAIL");
 
                 }
                 else
@@ -433,10 +453,10 @@ public class COORDINATELAYOUT
             @Override
             public void actionPerformed(ActionEvent e) {
                 int wereThisMany = gamestate.getResources()[gamestate.SCREWS];
-                gamestate.buyResource(1, gamestate.SCREWS);
+                gamestate.buyResource(purchaseQuantity, gamestate.SCREWS);
                 if (gamestate.getResources()[gamestate.SCREWS] != wereThisMany)
                 {
-                    writeInConsole("[PURCHASE] BOUGHT 1 SCREW"); // TODO should be in bulk
+                    writeInConsole("[PURCHASE] BOUGHT "+ purchaseQuantity +" SCREW"); // TODO should be in bulk
 
                 }
                 else
@@ -451,10 +471,10 @@ public class COORDINATELAYOUT
             @Override
             public void actionPerformed(ActionEvent e) {
                 int wereThisMany = gamestate.getResources()[gamestate.HARDBOARD];
-                gamestate.buyResource(1, gamestate.HARDBOARD);
+                gamestate.buyResource(purchaseQuantity, gamestate.HARDBOARD);
                 if (gamestate.getResources()[gamestate.HARDBOARD] != wereThisMany)
                 {
-                    writeInConsole("[PURCHASE] BOUGHT 1 HARDBOARD");
+                    writeInConsole("[PURCHASE] BOUGHT "+ purchaseQuantity +" HARDBOARD");
 
                 }
                 else
