@@ -13,6 +13,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.TimerTask;
+import java.util.Timer;
 
 public class COORDINATELAYOUT
 {
@@ -62,7 +64,11 @@ public class COORDINATELAYOUT
     static JButton buyHardboardButton = new JButton();
     static JButton buyScrewsButton = new JButton();
 
-
+    /*
+    AUTO TICKER
+     */
+    static Timer autoTickerTimer;
+    static boolean autoTickerActive;
 
 
     public static void main(String[] args)
@@ -154,6 +160,8 @@ public class COORDINATELAYOUT
         timesTenButton.setPressedIcon(new ImageIcon("furnishResources/10_CLICK.png"));
         timesTenButton.setBounds(272, 180, 16, 48);
         backgroundPanel.add(timesTenButton);
+
+
 
 
         /*
@@ -277,12 +285,54 @@ public class COORDINATELAYOUT
 
         backgroundPanel.add(backgroundImg);
 
+        /*
+        TICK BUTTONS
+         */
+
+        // autoTicker
+        createAutoTicker();
+
         JButton tickButton = new JButton("TICK");
         tickButton.setBounds(490, 289, 75, 20);
         backgroundPanel.add(tickButton);
+        tickButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gamestate.setTicksActive(gamestate.getTicksActive() + 1);
+                consoleText.setText(" # NEW TICK [" + gamestate.getTicksActive() + "]");
+                consoleText.append(gamestate.tick());
+                updateGUI();
+            }
+        });
 
         JButton autoTickerToggle = new JButton("AUTO");
         autoTickerToggle.setBounds(767, 289, 75, 20);
+        autoTickerToggle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                autoTickerActive = !(autoTickerActive);
+
+                String onOff;
+
+                if (autoTickerActive)
+                {
+                    onOff = "| ENABLED |";
+                    autoTickerToggle.setBackground(Color.green);
+                }
+                else
+                {
+                    onOff = "| DISABLED |";
+                    autoTickerToggle.setBackground(Color.red);
+
+                }
+
+                writeInConsole("\n[AUTOTICKER] " + onOff);
+
+                // TODO on and off icon
+
+                updateGUI();
+            }
+        });
         backgroundPanel.add(autoTickerToggle);
 
         /*
@@ -294,9 +344,12 @@ public class COORDINATELAYOUT
         consoleText.setEditable(false);
         consoleText.setBounds(483, 325, 377, 275);
         backgroundPanel.add(consoleText);
-        writeInConsole(" > Welcome! SIMULATION STARTED.\n" +
+        writeInConsole(" > Welcome to furnishSim!\n" +
                             "   - You have $150, use it to buy stuff!\n" +
-                            "   - Claim your free blueprint in the shop!");
+                            "   - Claim your free blueprint in the shop!\n" +
+                            "   - Build things, advertise, and have fun!\n\n" +
+                            " Press the [TICK] button to go through ticks, or\n" +
+                            " use [AUTO-TICK] to have it be automatic.\n----------------------------------------------\n");
 
 //         consoleCover.setBounds(483, 274, 366, 51);
 
@@ -493,9 +546,8 @@ public class COORDINATELAYOUT
         tables.setText(String.valueOf(gamestate.getFurnitures()[gamestate.TABLES].getNumInStock()) + " owned");
         shelves.setText(String.valueOf(gamestate.getFurnitures()[gamestate.SHELVES].getNumInStock()) + " owned");
         mailboxes.setText(String.valueOf(gamestate.getFurnitures()[gamestate.MAILBOXES].getNumInStock()) + " owned");
-        popularity.setText(String.valueOf(gamestate.getCustomerAttraction()));
-        money.setText(String.valueOf("$" + gamestate.getMoney()));
-        blueprints.setText(String.valueOf(gamestate.getBlueprintsUnlocked()));
+        popularity.setText(String.valueOf(Math.round(gamestate.getCustomerAttraction() * 100)) + "%");
+        money.setText(String.format("$%.2f", gamestate.getMoney()));        blueprints.setText(String.valueOf(gamestate.getBlueprintsUnlocked()));
         posters.setText(String.valueOf(gamestate.getNumPosters()));
         wood.setText(String.valueOf(gamestate.getResources()[gamestate.WOOD]));
         nails.setText(String.valueOf(gamestate.getResources()[gamestate.NAILS]));
@@ -555,6 +607,27 @@ public class COORDINATELAYOUT
     }
     public static void writeInConsole(String msg) {
         consoleText.append(msg + "\n");
+    }
+
+    public static void createAutoTicker()
+    {
+        autoTickerTimer = new Timer();
+
+        autoTickerTimer.scheduleAtFixedRate(new TimerTask()
+        {
+            @Override
+            public void run() {
+                if (autoTickerActive)
+                {
+                    // also happens in the plain tick
+                    gamestate.setTicksActive(gamestate.getTicksActive() + 1);
+                    consoleText.setText("> (AUTO) NEW TICK [" + gamestate.getTicksActive() + "]\n");
+                    consoleText.append(gamestate.tick());
+
+                    updateGUI();
+                }
+            }
+        }, 2000, 2000);
     }
 
 }

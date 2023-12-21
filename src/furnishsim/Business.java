@@ -48,7 +48,7 @@ public class Business
     public Business()
     {
         companyName = "Industrial Furniture Inc.";
-        money = 150000;
+        money = 150;
         storeBought = false;
         ticksActive = 0;
         profit = 0;
