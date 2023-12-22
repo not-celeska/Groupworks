@@ -1,50 +1,50 @@
 import java.util.Random;
 import java.lang.Math;
 
-/**
- * AKA GAME STATE
- */
+// BUSINESS CLASS: Holds all game data.
 public class Business
 {
 
-    // RANDOM CHANCE MAKER ===
-    private Random aiBehaviours = new Random();
-    // =======================
+    // -- INSTANCE VARIABLES [FIELDS] -----------------------------
 
-    private String companyName;
+    // General.
+    private Random aiBehaviours = new Random();
     private boolean storeBought;
     private double popularity;
     private double money;
-    private int[] resources;
-    final private double[] resourcePrice = {8.0, 0.15, 0.05, 32};
-    final public int WOOD = 0;
-    final public int NAILS = 1;
-    final public int SCREWS = 2;
-    final public int HARDBOARD = 3;
-
-    final public int STOOLS = 0;
-    final public int CHAIRS = 1;
-    final public int TABLES = 2;
-    final public int SHELVES = 3;
-    final public int MAILBOXES = 4;
-
-    private Furniture[] furnitures = {
-            /* new Furniture("Stool", 0, 3, 10, true),*/
-            new Furniture("Stool", 0.0, new int[] {2, 4, 0, 0}, 17.6, false, "furnishResources/STOOL.png", "furnishResources/STOOL_HOVER.png", "furnishResources/STOOL_PRESSED.png"),
-            new Furniture("Chair", 200.0, new int[] {3, 6, 4, 0}, 25.1, false, "furnishResources/CHAIR.png", "furnishResources/CHAIR_HOVER.png", "furnishResources/CHAIR_PRESSED.png"),
-            new Furniture("Table", 400, new int[] {8, 4, 8, 1}, 96.8, false, "furnishResources/TABLE.png", "furnishResources/TABLE_HOVER.png", "furnishResources/TABLE_PRESSED.png"),
-            new Furniture("Shelf", 650, new int[] {2, 4, 0, 1}, 48.6, false, "furnishResources/SHELF.png", "furnishResources/SHELF_HOVER.png", "furnishResources/SHELF_PRESSED.png"),
-            new Furniture("Mailbox", 1500, new int[] {3, 40, 12, 0}, 30.6, false, "furnishResources/MAILBOX.png", "furnishResources/MAILBOX_HOVER.png", "furnishResources/MAILBOX_PRESSED.png") };
     private int ticksActive;
     private int customersInStore;
     private int enterPercentage;
     private int numberOfPosters;
     final private int POSTER_PRICE = 150;
 
+    // Resource & Furniture arrays.
+    private int[] resources;
+    final private double[] resourcePrice = {8.0, 0.15, 0.05, 32};
+    private Furniture[] furnitures = {
+            new Furniture("Stool", 0.0, new int[] {2, 4, 0, 0}, 17.6, false, "furnishResources/STOOL.png", "furnishResources/STOOL_HOVER.png", "furnishResources/STOOL_PRESSED.png"),
+            new Furniture("Chair", 200.0, new int[] {3, 6, 4, 0}, 25.1, false, "furnishResources/CHAIR.png", "furnishResources/CHAIR_HOVER.png", "furnishResources/CHAIR_PRESSED.png"),
+            new Furniture("Table", 400, new int[] {8, 4, 8, 1}, 96.8, false, "furnishResources/TABLE.png", "furnishResources/TABLE_HOVER.png", "furnishResources/TABLE_PRESSED.png"),
+            new Furniture("Shelf", 650, new int[] {2, 4, 0, 1}, 48.6, false, "furnishResources/SHELF.png", "furnishResources/SHELF_HOVER.png", "furnishResources/SHELF_PRESSED.png"),
+            new Furniture("Mailbox", 1500, new int[] {3, 40, 12, 0}, 30.6, false, "furnishResources/MAILBOX.png", "furnishResources/MAILBOX_HOVER.png", "furnishResources/MAILBOX_PRESSED.png") };
+
+    // Indexes.
+    final public int WOOD = 0;
+    final public int NAILS = 1;
+    final public int SCREWS = 2;
+    final public int HARDBOARD = 3;
+    final public int STOOLS = 0;
+    final public int CHAIRS = 1;
+    final public int TABLES = 2;
+    final public int SHELVES = 3;
+    final public int MAILBOXES = 4;
+
+    // -- METHODS -------------------------------------
+
+    // CONSTRUCTOR: Method to create object with base values.
     public Business()
     {
-        companyName = "Industrial Furniture Inc.";
-        money = 150;
+        money = 75;
         storeBought = false;
         ticksActive = 0;
         resources = new int[] {0, 0, 0, 0};
@@ -53,48 +53,56 @@ public class Business
         numberOfPosters = 0;
     }
 
+
+    // ================
+    // == GENERAL =====
+    // ================
+
+
+    // TICK: Runs everything that can happen inside a tick.
     public String tick()
     {
+        // We'll add updates to this variable.
         String tickUpdates = "\n";
 
-        // Run customer ai; entering store, leaving, buying;
+        // Run customer ai; entering store, leaving, buying.
         tickUpdates += runCustomerAI();
 
         // Run event probability.
         tickUpdates += runEvent();
 
         return tickUpdates;
-
-        /*
-        this will be called from gui; kind of like an "update" method
-        updates values per tick like
-        - customers entering
-        - events (robberies, discounts, etc) <-- random events
-        - sales
-        - updates time spent?
-         */
     }
 
     public String runCustomerAI()
     {
+        // We'll add updates to this variable.
         String customerUpdates = "";
 
-        // CUSTOMER PURCHASING
-        if (customersInStore > 0) {
+        // CUSTOMER PURCHASING.
+        if (customersInStore > 0) { // If there is a person in the store..
+
+            // Goes through evey person inside the store.
             for (int customer = 1; customer <= customersInStore; customer++) {
-                // checks stock
+
+                // If there's nothing to buy; customer leaves.
                 if (findTotalStock() == 0) {
                     customerUpdates += "[CUSTOMER] NO ITEMS IN STOCK: CUSTOMER LEFT\n";
                     customersInStore -= 1;
-                    popularity -= 0.025;
+                    popularity -= 0.025; // Also leaves a bad review because they could find what they wanted.
                     break;
                 }
-                // there are people in the store
+
+                // If there are things to buy.
                 else
                 {
+                    // Gives customer 30% chance of buying something.
                     if (aiBehaviours.nextInt(1, 100) <= 30) {
-                        // checks availibility in order; might randomize for realism later through random indexing [5-15min]
+
+                        // Checks availability in order; might randomize for realism later through random indexing [5-15min]
                         for (Furniture furniture : furnitures) {
+
+                            // If available, customer buys it.
                             if (furniture.getNumInStock() > 0) {
                                 money += furniture.getSellingPrice();
                                 furniture.setNumInStock(furniture.getNumInStock() - 1);
@@ -108,35 +116,47 @@ public class Business
             }
         }
 
+        // CUSTOMER ENTERING.
+
+        // Total customer entering percentage (based off constant enterPercentage [if user is in workshop or store setting] and variable popularity).
         double customerEnterPercentage = popularity * enterPercentage;
+
+        // If the total percentage is greater than a randomly generated number between 1 and 100.
         if (aiBehaviours.nextDouble(0.0, 100.0) <= customerEnterPercentage)
         {
+            // How many customers enter.
             int howManyEntered = aiBehaviours.nextInt(1, 5);
             customersInStore += howManyEntered;
             customerUpdates += "[CUSTOMER] " + howManyEntered + " ENTERED STORE\n";
         }
 
+        // If no one enters and theres no one in the store: print a certain message.
         if (customersInStore == 0)
         {
             customerUpdates += "[CUSTOMERS] NO CUSTOMERS IN STORE\n";
         }
+
+        // i.e., there are people in the store.
         else
         {
             customerUpdates += "[CUSTOMER] IN STORE: " + customersInStore + "\n";
         }
+
         return customerUpdates;
     }
 
     public String runEvent()
     {
+        // Returning this later.
         String eventUpdates = "";
 
-        // probability of ANY event to happen: 10%
+        // probability of ANY event to happen: 10%.
         if (aiBehaviours.nextInt(1, 100) <= 20)
         {
-            // another roll for which event happens (sections of 20+ intervals)
+            // Another roll for which event happens (sections of 20+ intervals)
             int eventToOccur = aiBehaviours.nextInt(1, 100);
 
+            // Generate event.
             if (eventToOccur <= 20)
             {
                 // EVENT 1 | ROBBERY
@@ -159,7 +179,7 @@ public class Business
             }
             else if (eventToOccur <= 40)
             {
-                // EVENT 2 | DISTANT RELATIVE [MILLIONARE] DIED
+                // EVENT 2 | DISTANT RELATIVE [RICH] DIED
                 // + money
                 int moneyInherited;
 
@@ -180,7 +200,7 @@ public class Business
             }
             else if (eventToOccur <= 60)
             {
-                // EVENT 3 | FURNITURE BREAKS
+                // EVENT 3 | FURNITURE BREAKS; didn't finish this.
                 // random --> -= stock
                 eventUpdates = "[EVENT] you woulda lost some furniture if \n        it wasnt for this tupoy programmer!";
             }
@@ -205,7 +225,7 @@ public class Business
                 if (aiBehaviours.nextBoolean())
                 {
                     // GOT PRAISED!
-                    eventUpdates += "[EVENT] \"w rizz chat\" \n        | YOU WENT VIRAL |";
+                    eventUpdates += "[EVENT] \"w store chat\" \n        | YOU WENT VIRAL |";
                     popularity += 0.5;
                 }
                 else
@@ -216,6 +236,8 @@ public class Business
                 }
 
             }
+
+            // This won't be reached unless there's an error.
             else
             {
                 eventUpdates += "[EVENT] uhh there was supposed to be an event..";
@@ -225,7 +247,12 @@ public class Business
         return eventUpdates;
     }
 
-    // ========================
+
+    // =====================
+    // == USER ACTIONS =====
+    // =====================
+
+
     public void buyResource(int quantity, int resourceIndex)
     {
         if (money >= (resourcePrice[resourceIndex] * quantity))
@@ -297,12 +324,16 @@ public class Business
     }
 
 
+    // ==================================
+    // == GETTERS, SETTERS, FINDERS =====
+    // ==================================
+
+
     public Furniture[] getFurnitures() {
         return furnitures;
     }
 
-    public int findTotalStock()
-    {
+    public int findTotalStock() {
         int totalStock = 0;
 
         for (Furniture furniture : furnitures)
@@ -312,8 +343,6 @@ public class Business
 
         return totalStock;
     }
-
-
 
     public int getNumPosters()
     {
@@ -325,21 +354,6 @@ public class Business
         return popularity;
     }
 
-    public String toString() // was used back when we used text-based to test
-    {
-        // all basic info
-        String businessData = companyName.toUpperCase() + " | " + "MONEY: " + money + "$ | WOOD: " + resources[WOOD] + " | NAILS: " + resources[NAILS] + " | SCREWS: " + resources[SCREWS] + " | HARDWOOD: " + resources[HARDBOARD] +
-                " | TICKS SINCE START: " + ticksActive + " | TOTAL STOCK: " + findTotalStock() + " | CUSTOMERS IN STORE: " + customersInStore  + " | CUSTOMER ATTRACTION: " + popularity + " | ";
-
-        // stock
-        for (Furniture furniture : furnitures)
-        {
-            businessData += (furniture.getFurnitureName().toUpperCase() + ": " + furniture.getNumInStock() + " | ");
-        }
-
-        return businessData;
-    }
-
     public int getTicksActive() {
         return ticksActive;
     }
@@ -348,8 +362,7 @@ public class Business
         this.ticksActive = ticksActive;
     }
 
-    public int getBlueprintsUnlocked()
-    {
+    public int getBlueprintsUnlocked() {
         int blueprintsUnlocked = 0;
 
         for (Furniture furniture : furnitures)
@@ -372,10 +385,6 @@ public class Business
         return resources;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
     public boolean isBoughtStore() {
         return storeBought;
     }
@@ -385,8 +394,11 @@ public class Business
     }
 
 
+    // ================
+    // == UTILITY =====
+    // ================
 
-    // utility
+
     public boolean listIsGreater(int[] list1, int[] list2) { // returns true if list1's elements are all greater than or equal to list2's
         for (int i = 0; i < list1.length; i++) {
             if (list1[i] < list2[i]) {
@@ -395,14 +407,15 @@ public class Business
         }
         return true;
     }
+
     public void subtractList(int[] list1, int[] list2) { // subtracts list2 from list1
         for (int i = 0; i < list1.length; i++) {
             list1[i] -= list2[i];
         }
     }
+
     public void roundToTwo(double num) {
         num = (Math.round(num*100))/100;
     }
 
 }
-

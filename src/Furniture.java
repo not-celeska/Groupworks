@@ -1,19 +1,20 @@
 import javax.swing.*;
 
+// FURNITURE CLASS: Used for making furniture objects.
 public class Furniture
 {
     // BASIC INFORMATION
-    private String furnitureName; // name of the furniture item: stool, chair, etc.
+    private String furnitureName;
     private double blueprintCost;
-    private int[] resourceCost; // wood needed to build
+    private int[] resourceCost;
     private double sellingPrice;
 
     // STATUS VARIABLE
     private boolean hasBlueprint;
-    private int numInStock; // simulation wont sell if this is 0; adds 1 every time made.
+    private int numInStock;
 
     // ICON IMAGES FOR BUTTONS
-    private ImageIcon icon; // disabledIcon
+    private ImageIcon icon;
     private ImageIcon hoverIcon;
     private ImageIcon clickIcon;
 
@@ -78,7 +79,6 @@ public class Furniture
     public int getNumInStock() {
         return numInStock;
     }
-
 
     public void setNumInStock(int numInStock) {
         this.numInStock = numInStock;
